@@ -1,4 +1,4 @@
-# Journal — Old Book
+# Journal
 
 This is a minimal writing blog for GitHub Pages.
 
@@ -12,3 +12,4 @@ Structure:
 
 
 Optional: add a small build script to convert `posts/*.md` to `posts/*.html`.
+
