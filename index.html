@@ -14,6 +14,10 @@
   <div class="stage">
     <article class="page" aria-labelledby="title">
       <header>
+        <nav aria-label="Main">
+          <a href="/index.html">Home</a>
+          <a href="#archive" style="margin-left:1rem">Archive</a>
+        </nav>
         <h1 id="title">Journal</h1>
         <div class="meta">A simple, classic layout — GitHub Pages ready</div>
       </header>
@@ -29,6 +33,39 @@
 
         <footer>— Published to GitHub Pages</footer>
       </main>
+
+      <section id="archive" style="margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(0,0,0,0.06);">
+        <header>
+          <h2>Archive</h2>
+          <p class="meta">Manual post list — edit this file to add new posts.</p>
+        </header>
+
+        <main>
+          <p>To add a new post (no build tools required):</p>
+          <ol>
+            <li>Create a new HTML file in the <code>posts/</code> folder. Use the naming convention <code>YYYY-MM-DD-slug.html</code>.</li>
+            <li>Edit the file title, date and content. Use the shared stylesheet at <code>/assets/css/styles.css</code>.</li>
+            <li>Add an entry to this archive section linking to the new file (example below).</li>
+            <li>Commit and push.</li>
+          </ol>
+
+          <h3>Example entry</h3>
+          <pre style="background:rgba(0,0,0,0.03); padding:.6rem; border-radius:4px; overflow:auto;">
+&lt;article class="post-list-item"&gt;
+  &lt;h3&gt;&lt;a href="posts/2025-11-19-welcome.html"&gt;Welcome&lt;/a&gt;&lt;/h3&gt;
+  &lt;time datetime="2025-11-19"&gt;2025-11-19&lt;/time&gt;
+  &lt;p&gt;Short excerpt for the post.&lt;/p&gt;
+&lt;/article&gt;
+          </pre>
+
+          <h3>Existing posts</h3>
+          <ul>
+            <!-- Add links to your posts here -->
+            <li>No posts yet — create a file in <code>posts/</code> and add it above.</li>
+          </ul>
+        </main>
+      </section>
+
     </article>
   </div>
 </body>
