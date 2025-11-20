@@ -3,68 +3,96 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Journal </title>
+  <title>Journal Index</title>
 
   <!-- Classic serif font -->
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
+
 <body>
   <div class="stage">
-    <article class="page" aria-labelledby="title">
-      <header>
-        <nav aria-label="Main">
+    <article class="page" aria-labelledby="site-title">
+
+      <header class="page-header">
+        <nav class="main-nav" aria-label="Main navigation">
           <a href="/index.html">Home</a>
-          <a href="#archive" style="margin-left:1rem">Archive</a>
+          <a href="/journal.html" style="margin-left:1rem">Journal</a>
         </nav>
-        <h1 id="title">Journal</h1>
-        <div class="meta">A simple, classic layout — GitHub Pages ready</div>
+
+        <h1 id="site-title">Notebook / Journal</h1>
+        <p class="meta">
+          Short notes, longer essays, and technical fragments —
+          written in a text editor and published via GitHub Pages.
+        </p>
       </header>
 
-      <main>
-        <p>Once upon a time there was a person who decided to write things in a code editor — not just code but notes and journals. Like a madman with a serif font and his code set to a matching old‑style face.</p>
+      <main class="content">
+        <section aria-label="Latest entries">
+          <h2>Latest posts</h2>
+          <p class="meta">Newest first. Edit this list when you add a post in <code>posts/</code>.</p>
 
-        <p>The design above is intentionally restrained: narrow measure, generous leading and margins, a warm paper tone and a drop cap to evoke an old book. The type is an elegant Garamond revival that reads well on screens and prints.</p>
+          <div class="post-list">
 
-        <blockquote>Content first, ornament sparingly — the classic recipe for readable pages.</blockquote>
+            <!-- Example post block #1 -->
+            <article class="post-list-item">
+              <h3>
+                <a href="posts/2025-11-19-welcome.html">
+                  Welcome
+                </a>
+              </h3>
+              <time datetime="2025-11-19" class="post-date">2025-11-19</time>
+              <p class="post-excerpt">
+                A short note about why this notebook exists and how it is written:
+                plain text, Garamond, and a minimal GitHub Pages workflow.
+              </p>
+            </article>
 
-        <p>Example inline <code>snippet()</code> and a slightly emphasized <code>variable</code> are shown in the same serif family so code visually blends with the journal aesthetic.</p>
+            <!-- Example post block #2 -->
+            <article class="post-list-item">
+              <h3>
+                <a href="posts/2025-11-20-monetary-systems.html">
+                  Notes on Monetary Systems
+                </a>
+              </h3>
+              <time datetime="2025-11-20" class="post-date">2025-11-20</time>
+              <p class="post-excerpt">
+                A rough sketch of money as a network of balance sheets, promises,
+                and constraints — written more like a journal entry than a paper.
+              </p>
+            </article>
 
-        <footer>— Published to GitHub Pages</footer>
-      </main>
+            <!-- Add more posts here:
+            <article class="post-list-item">
+              <h3><a href="posts/YYYY-MM-DD-slug.html">Title</a></h3>
+              <time datetime="YYYY-MM-DD" class="post-date">YYYY-MM-DD</time>
+              <p class="post-excerpt">One- or two-sentence description.</p>
+            </article>
+            -->
 
-      <section id="archive" style="margin-top:2rem; padding-top:1rem; border-top:1px solid rgba(0,0,0,0.06);">
-        <header>
+          </div>
+        </section>
+
+        <section aria-label="All posts by year" style="margin-top:3rem;">
           <h2>Archive</h2>
-          <p class="meta">Manual post list — edit this file to add new posts.</p>
-        </header>
+          <p class="meta">A simple manual archive. Group posts by year as the notebook grows.</p>
 
-        <main>
-          <p>To add a new post (no build tools required):</p>
-          <ol>
-            <li>Create a new HTML file in the <code>posts/</code> folder. Use the naming convention <code>YYYY-MM-DD-slug.html</code>.</li>
-            <li>Edit the file title, date and content. Use the shared stylesheet at <code>/assets/css/styles.css</code>.</li>
-            <li>Add an entry to this archive section linking to the new file (example below).</li>
-            <li>Commit and push.</li>
-          </ol>
-
-          <h3>Example entry</h3>
-          <pre style="background:rgba(0,0,0,0.03); padding:.6rem; border-radius:4px; overflow:auto;">
-&lt;article class="post-list-item"&gt;
-  &lt;h3&gt;&lt;a href="posts/2025-11-19-welcome.html"&gt;Welcome&lt;/a&gt;&lt;/h3&gt;
-  &lt;time datetime="2025-11-19"&gt;2025-11-19&lt;/time&gt;
-  &lt;p&gt;Short excerpt for the post.&lt;/p&gt;
-&lt;/article&gt;
-          </pre>
-
-          <h3>Existing posts</h3>
-          <ul>
-            <!-- Add links to your posts here -->
-            <li>No posts yet — create a file in <code>posts/</code> and add it above.</li>
+          <h3>2025</h3>
+          <ul class="archive-list">
+            <li>
+              <time datetime="2025-11-20">2025-11-20</time>
+              — <a href="posts/2025-11-20-monetary-systems.html">Notes on Monetary Systems</a>
+            </li>
+            <li>
+              <time datetime="2025-11-19">2025-11-19</time>
+              — <a href="posts/2025-11-19-welcome.html">Welcome</a>
+            </li>
           </ul>
-        </main>
-      </section>
+
+          <!-- Add new years and posts as needed -->
+        </section>
+      </main>
 
     </article>
   </div>
