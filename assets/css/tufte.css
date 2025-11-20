@@ -1,0 +1,226 @@
+﻿*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #fdfaf5;
+  color: #111;
+  font-family: "EB Garamond", serif;
+  line-height: 1.6;
+}
+
+/* Site frame */
+.site {
+  max-width: 1120px;
+  margin: 2.5rem auto 3rem;
+  padding: 0 1rem;
+}
+
+/* Header */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding-bottom: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.site-title-block {
+  max-width: 60%;
+}
+
+.site-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #111;
+}
+
+.site-subtitle {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #666;
+}
+
+.site-nav {
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9rem;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: #555;
+  margin-left: 1rem;
+}
+
+.site-nav a:first-child {
+  margin-left: 0;
+}
+
+.site-nav a:hover {
+  text-decoration: underline;
+}
+
+/* Page content */
+.page {
+  position: relative;
+  display: block;
+}
+
+/* Tufte-style narrow main column */
+.intro,
+.section-block {
+  max-width: 38rem;
+  margin-left: 0;
+  margin-right: auto;
+  margin-bottom: 2.5rem;
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.35rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+p {
+  margin-top: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.meta {
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+code {
+  font-family: "Source Code Pro", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  background: rgba(0,0,0,0.04);
+  padding: 0.05rem 0.25rem;
+  border-radius: 3px;
+}
+
+/* Post list */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  margin-top: 1.2rem;
+}
+
+.post-list-item {
+  border-left: 2px solid rgba(0,0,0,0.06);
+  padding-inline-start: 0.8rem;
+}
+
+.post-title {
+  margin: 0 0 0.15rem;
+}
+
+.post-title a {
+  text-decoration: none;
+  color: #111;
+}
+
+.post-title a:hover {
+  text-decoration: underline;
+}
+
+.post-meta {
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.8rem;
+  color: #777;
+  margin-bottom: 0.25rem;
+}
+
+.post-excerpt {
+  margin: 0;
+}
+
+/* Archive */
+.archive-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.archive-list li {
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.archive-list time {
+  color: #555;
+}
+
+/* Sidenotes */
+.sidenote-ref {
+  cursor: pointer;
+}
+
+.sidenote {
+  position: absolute;
+  max-width: 16rem;
+  font-size: 0.8rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Place sidenotes in the right margin on wide screens */
+@media (min-width: 980px) {
+  .intro {
+    margin-left: 0;
+  }
+
+  .sidenote {
+    right: 0;
+    top: 6.2rem; /* adjust per-page if needed */
+  }
+}
+
+/* On smaller screens, inline sidenotes */
+@media (max-width: 979px) {
+  .sidenote {
+    position: static;
+    display: block;
+    margin: 0.5rem 0 0.7rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid rgba(0,0,0,0.12);
+  }
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 3rem;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  padding-top: 0.8rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.8rem;
+  color: #777;
+}
