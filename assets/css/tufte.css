@@ -1,84 +1,105 @@
-*,
-*::before,
-/* Typography */
-h1, h2, h3 {
+/* Reset and sensible defaults */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 17px; /* base; reader sizes adjust this */
+}
+
+body {
+  margin: 0;
+  color: #111;
+  background: #fff;
+  font-family: "Noto Serif", "Georgia", serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* Header / site branding */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.site-title {
+  font-family: "Noto Serif", serif;
+  font-size: 1.25rem;
   font-weight: 600;
+  text-decoration: none;
+  color: #111;
+}
+
+.site-nav {
+  font-family: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+}
+
+.site-nav a { color: #333; text-decoration: none; margin-left: 1rem; }
+
+/* Page / content layout */
+.page { padding: 0 1rem; }
+
+.intro, .section-block, article { max-width: 36rem; margin-left: 0; margin-right: auto; margin-bottom: 2.5rem; }
+
+/* Headings */
+h1, h2, h3 {
   margin-top: 1.8rem;
   margin-bottom: 0.5rem;
   line-height: 1.35;
-}
-
-h1 {
-  font-size: 1.8rem;
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.4;
-}
-
-/* Japanese/CJK titles: no italic (doesn't exist in CJK fonts) */
-:lang(ja) h1,
-:lang(zh) h1 {
-  font-style: normal;
   font-weight: 600;
 }
 
-h2 {
-  font-size: 1.2rem;
-  font-variant: small-caps;
-  font-style: normal;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+h1 { font-size: 1.8rem; font-style: italic; font-weight: 600; }
+h2 { font-size: 1.2rem; font-variant: small-caps; font-weight: 600; }
+h3 { font-size: 1.05rem; font-style: italic; font-weight: 600; }
+
+/* Language-specific adjustments using attribute selectors (better cross-browser compatibility) */
+html[lang="ja"] h1, html[lang="zh"] h1 { font-style: normal; }
+html[lang="ja"] h2, html[lang="zh"] h2, html[lang="mn"] h2 { font-variant: normal; }
+html[lang="ja"] h3, html[lang="zh"] h3 { font-style: normal; }
+
+p { margin-top: 0; margin-bottom: 1rem; text-align: justify; hyphens: auto; }
+
+/* Longform articles: wider measure and slightly larger text for comfortable reading */
+article.longform, article.longform .intro, article.longform .section-block {
+  max-width: 42rem;
+  font-size: 1.03rem;
+  line-height: 1.75;
 }
 
-/* CJK: small-caps doesn't apply, use weight instead */
-:lang(ja) h2,
-:lang(zh) h2,
-:lang(mn) h2 {
-  font-variant: normal;
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
-h3 {
-  font-size: 1.05rem;
-  font-style: italic;
-  font-weight: 400;
-}
-
-:lang(ja) h3,
-:lang(zh) h3 {
-  font-style: normal;
-  font-weight: 600;
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  text-align: justify;
-  hyphens: auto;
-  word-break: normal;
-  overflow-wrap: break-word;
-}
-
-/* Longform articles: slightly larger type and wider measure for comfortable reading */
-article.longform,
-article.longform .intro,
-article.longform .section-block {
-  max-width: 42rem; /* wider measure for long reads */
-  font-size: 1.03rem; /* slightly larger body type */
-  line-height: 1.8;
-}
-
-/* Adjust headings inside longform */
-article.longform h1 { font-size: 2.1rem; line-height:1.35; }
+article.longform h1 { font-size: 2.1rem; }
 article.longform h2 { font-size: 1.35rem; }
-article.longform h3 { font-size: 1.15rem; }
 
-/* CJK longform tweaks */
-:lang(ja) article.longform, :lang(zh) article.longform {
-  font-size: 1.01rem;
-  line-height: 1.7;
+/* Reader size controls: compact / comfortable / large */
+html.reader-compact { font-size: 15px; }
+html.reader-comfortable { font-size: 17px; }
+html.reader-large { font-size: 19px; }
+
+/* Margin figure / sidenote basics */
+.margin-figure { float: right; width: 12rem; margin-left: 1rem; margin-bottom: 0.5rem; }
+.margin-figure img { max-width: 100%; display: block; }
+.marginnote, .sidenote { font-size: 0.9rem; color: #444; }
+
+/* Full-width / wide figures inside article */
+.fullwidth-figure { display: block; width: 100%; margin: 1rem 0; }
+
+/* Simple responsive tweaks */
+@media (max-width: 680px) {
+  .margin-figure { float: none; width: 100%; margin: 0 0 1rem 0; }
+  .intro, article { padding: 0 0.5rem; }
 }
+
+/* Utility */
+.figure-caption { font-size: 0.9rem; color: #666; margin-top: 0.25rem; }
+
+/* End of cleaned stylesheet */
 
 .meta {
   font-family: "Noto Sans", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
