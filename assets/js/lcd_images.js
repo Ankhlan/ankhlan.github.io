@@ -61,7 +61,7 @@
       urls = list || [];
       render();
       // Rotate images periodically.
-      setInterval(render, 12 * 1000);
+      setInterval(render, 3 * 1000);
     });
   }
 
