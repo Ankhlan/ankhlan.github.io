@@ -71,9 +71,9 @@ h1, h2, h3 {
   font-weight: 600;
 }
 
-h1 { font-size: 1.8rem; font-style: italic; font-weight: 600; }
+h1 { font-size: 1.8rem; font-style: normal; font-weight: 600; }
 h2 { font-size: 1.2rem; font-variant: small-caps; font-weight: 600; }
-h3 { font-size: 1.05rem; font-style: italic; font-weight: 600; }
+h3 { font-size: 1.05rem; font-style: normal; font-weight: 600; }
 
 /* Language-specific adjustments using attribute selectors (better cross-browser compatibility) */
 html[lang="ja"] h1, html[lang="zh"] h1 { font-style: normal; }
@@ -197,8 +197,8 @@ h1, h2, h3 {
 
 h1 {
   font-size: 1.8rem;
-  font-weight: 400;
-  font-style: italic;
+  font-weight: 600;
+  font-style: normal;
   line-height: 1.4;
 }
 
@@ -213,7 +213,7 @@ h2 {
   font-size: 1.2rem;
   font-variant: small-caps;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
@@ -228,8 +228,8 @@ h2 {
 
 h3 {
   font-size: 1.05rem;
-  font-style: italic;
-  font-weight: 400;
+  font-style: normal;
+  font-weight: 600;
 }
 
 :lang(ja) h3,
