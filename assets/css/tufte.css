@@ -1,45 +1,91 @@
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
+/* Typography */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-top: 1.8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
 }
 
-html {
-  font-size: 17px;
+h1 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.4;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background: #f8f8f8;
-  color: #1a1a1a;
-  font-family: "Noto Serif", "Noto Serif JP", Georgia, "Times New Roman", serif;
+/* Japanese/CJK titles: no italic (doesn't exist in CJK fonts) */
+:lang(ja) h1,
+:lang(zh) h1 {
+  font-style: normal;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.2rem;
+  font-variant: small-caps;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* CJK: small-caps doesn't apply, use weight instead */
+:lang(ja) h2,
+:lang(zh) h2,
+:lang(mn) h2 {
+  font-variant: normal;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+h3 {
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 400;
+}
+
+:lang(ja) h3,
+:lang(zh) h3 {
+  font-style: normal;
+  font-weight: 600;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: justify;
+  hyphens: auto;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* Longform articles: slightly larger type and wider measure for comfortable reading */
+article.longform,
+article.longform .intro,
+article.longform .section-block {
+  max-width: 42rem; /* wider measure for long reads */
+  font-size: 1.03rem; /* slightly larger body type */
+  line-height: 1.8;
+}
+
+/* Adjust headings inside longform */
+article.longform h1 { font-size: 2.1rem; line-height:1.35; }
+article.longform h2 { font-size: 1.35rem; }
+article.longform h3 { font-size: 1.15rem; }
+
+/* CJK longform tweaks */
+:lang(ja) article.longform, :lang(zh) article.longform {
+  font-size: 1.01rem;
   line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
 }
 
-/* Paper container */
-.site {
-  max-width: 1100px;
-  margin: 2rem auto 3rem;
-  padding: 3rem 4rem;
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+.meta {
+  font-family: "Noto Sans", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 0.5rem;
 }
-
-@media (max-width: 800px) {
-  .site {
-    margin: 0;
-    padding: 1.5rem 1.25rem;
-    box-shadow: none;
-  }
-}
-
-/* Header */
-.site-header {
-  display: flex;
-  justify-content: space-between;
   align-items: baseline;
   border-bottom: 1px solid #ddd;
   padding-bottom: 1rem;
