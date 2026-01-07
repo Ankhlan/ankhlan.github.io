@@ -561,6 +561,58 @@ a:hover {
   .reader-controls { margin-left: 0.5rem; }
 }
 
+/* Mobile optimizations (phones) */
+@media (max-width: 680px) {
+  /* Header: allow wrapping so nav + reader controls don't overflow */
+  .site-header {
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .site-title-block {
+    max-width: 100%;
+  }
+
+  .site-nav {
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+    column-gap: 0.8rem;
+  }
+
+  .site-nav a {
+    margin-left: 0;
+  }
+
+  .reader-controls {
+    align-items: flex-start;
+    margin-left: 0;
+  }
+
+  /* Reading: avoid full justification on narrow screens */
+  p {
+    text-align: left;
+    hyphens: none;
+  }
+
+  /* Tables: allow horizontal scroll instead of squeezing */
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Slightly tighter vertical rhythm */
+  h1, h2, h3 { margin-top: 1.4rem; }
+  figure { margin: 1.1rem 0; }
+}
+
+@media (max-width: 420px) {
+  .page { padding: 0 0.75rem; }
+  .site-header { padding: 1rem 0.75rem; }
+}
+
 /* Tags */
 .tag {
   font-family: "Noto Sans", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
