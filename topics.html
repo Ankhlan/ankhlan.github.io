@@ -21,11 +21,20 @@
         <a href="/about.html">About</a>
       </nav>
     </header>
-    <footer class="site-footer"><span>Static HTML index of topics.</span></footer>
-    <script src="/assets/js/reader.js"></script>
+
+    <div class="ticker-slot">
+      <div class="ticker ticker-bar" data-ticker aria-label="Notebook ticker">
+        <div class="ticker-viewport">
+          <div class="ticker-track">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <main class="page">
       <section class="section-block">
         <h1>Topics</h1>
         <p class="meta">Posts grouped by intellectual theme.</p>
+
         <section class="section-block">
           <h2>Reserves and Gold</h2>
           <p class="meta">Central bank reserves, gold holdings, FX accumulation</p>
@@ -34,6 +43,7 @@
             <li><time datetime="2025-12-15">2025-12-15</time> — <a href="posts/2025-12-15-gold-holdings/">Gold Holdings: Who Owns What</a></li>
           </ul>
         </section>
+
         <section class="section-block">
           <h2>Yield Curves</h2>
           <p class="meta">Term structure, inversion, carry trades</p>
@@ -41,6 +51,7 @@
             <li><time datetime="2025-12-28">2025-12-28</time> — <a href="posts/2025-12-28-yield-curve/">Yield Curve Inversion: What It Tells Us</a></li>
           </ul>
         </section>
+
         <section class="section-block">
           <h2>FX and Flows</h2>
           <p class="meta">Exchange rates, intervention, capital flows</p>
@@ -48,6 +59,7 @@
             <li><time datetime="2026-01-02">2026-01-02</time> — <a href="posts/2026-01-02-dollar-liquidity/">Dollar Liquidity and the Offshore System</a></li>
           </ul>
         </section>
+
         <section class="section-block">
           <h2>Monetary Systems</h2>
           <p class="meta">Plumbing, correspondent banking, settlements</p>
@@ -55,6 +67,7 @@
             <li><time datetime="2026-01-02">2026-01-02</time> — <a href="posts/2026-01-02-dollar-liquidity/">Dollar Liquidity and the Offshore System</a></li>
           </ul>
         </section>
+
         <section class="section-block">
           <h2>Central Banking</h2>
           <p class="meta">Policy, balance sheets, operations</p>
@@ -62,6 +75,7 @@
             <li><time datetime="2026-01-07">2026-01-07</time> — <a href="posts/2026-01-07-reserves-overview/">Central Bank Reserves: A Quick Overview</a></li>
           </ul>
         </section>
+
         <section class="section-block">
           <h2>Macro</h2>
           <p class="meta">Broader macro analysis</p>
@@ -71,7 +85,11 @@
         </section>
       </section>
     </main>
+
     <footer class="site-footer"><span>Static HTML index of topics.</span></footer>
   </div>
+
+  <script src="/assets/js/reader.js"></script>
+  <script src="/assets/js/ticker.js"></script>
 </body>
 </html>

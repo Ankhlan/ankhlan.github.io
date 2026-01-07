@@ -1,6 +1,16 @@
 (function () {
   'use strict';
 
+  async function loadJson(path) {
+    try {
+      const res = await fetch(path, { cache: 'no-store' });
+      if (!res.ok) return null;
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
   function pad2(n) {
     return String(n).padStart(2, '0');
   }
@@ -20,16 +30,42 @@
     return `${base}${sep}${base}${sep}${base}`;
   }
 
-  async function loadTickerItems() {
-    try {
-      const res = await fetch('/data/ticker.json', { cache: 'no-store' });
-      if (!res.ok) return null;
-      const data = await res.json();
-      if (!Array.isArray(data)) return null;
-      return data.map(x => (typeof x === 'string' ? x : null)).filter(Boolean);
-    } catch {
-      return null;
+  function normalizeTickerItems(data) {
+    if (!Array.isArray(data)) return null;
+    return data
+      .map(x => {
+        if (typeof x === 'string') return x;
+        if (x && typeof x === 'object' && typeof x.text === 'string') return x.text;
+        return null;
+      })
+      .filter(Boolean);
+  }
+
+  function normalizePrices(data) {
+    if (!data || typeof data !== 'object') return {};
+    // Accept either { key: "value" } or { values: { key: "value" } }
+    const values = (data.values && typeof data.values === 'object') ? data.values : data;
+    const out = {};
+    for (const [k, v] of Object.entries(values)) {
+      if (typeof v === 'string' || typeof v === 'number') out[String(k)] = String(v);
     }
+    return out;
+  }
+
+  function applyTokens(str, tokens) {
+    if (!str) return str;
+
+    let s = str;
+    if (tokens.TIME) s = s.replaceAll('{TIME}', tokens.TIME);
+
+    // {PRICE:BTCUSD}
+    s = s.replace(/\{PRICE:([^}]+)\}/g, (m, key) => {
+      const k = String(key || '').trim();
+      if (!k) return m;
+      return Object.prototype.hasOwnProperty.call(tokens.PRICES, k) ? tokens.PRICES[k] : m;
+    });
+
+    return s;
   }
 
   function initOne(el) {
@@ -37,10 +73,16 @@
     if (!track) return;
 
     let items = null;
+    let prices = {};
+
+    const tickerSrc = el.getAttribute('data-ticker-src') || '/data/ticker.json';
+    const pricesSrc = el.getAttribute('data-prices-src') || '/data/prices.json';
 
     function render() {
       const now = new Date();
       const clock = formatClock(now);
+
+      const tokens = { TIME: clock, PRICES: prices };
 
       const fallback = [
         '📌 Notebook ticker: notes • prices • weather',
@@ -48,15 +90,14 @@
         '✨ Tip: hover to pause'
       ];
 
-      const effective = (items && items.length ? items : fallback).map(s => {
-        return s.replace('{TIME}', clock);
-      });
+      const effective = (items && items.length ? items : fallback).map(s => applyTokens(s, tokens));
 
       track.textContent = buildText(effective);
     }
 
-    loadTickerItems().then(loaded => {
-      items = loaded;
+    Promise.all([loadJson(tickerSrc), loadJson(pricesSrc)]).then(([tickerData, pricesData]) => {
+      items = normalizeTickerItems(tickerData);
+      prices = normalizePrices(pricesData);
       render();
       // Update time once a minute.
       setInterval(render, 60 * 1000);
