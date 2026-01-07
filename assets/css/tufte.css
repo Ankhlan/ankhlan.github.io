@@ -684,14 +684,59 @@ body.lcd {
   align-items: center;
   justify-content: center;
   padding: 0;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Pixel grid + scanlines overlay */
+.lcd-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    /* horizontal scanlines */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.10) 0px,
+      rgba(255, 255, 255, 0.10) 1px,
+      rgba(0, 0, 0, 0) 3px,
+      rgba(0, 0, 0, 0) 6px
+    ),
+    /* pixel grid */
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 1px,
+      rgba(0, 0, 0, 0) 6px,
+      rgba(0, 0, 0, 0) 12px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 1px,
+      rgba(0, 0, 0, 0) 6px,
+      rgba(0, 0, 0, 0) 12px
+    );
 }
 
 .ticker.ticker-lcd {
   width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
   border-radius: 0;
-  padding: 1.25rem 1.5rem;
+  background: transparent;
+  padding: 2.5rem 2.25rem;
   font-size: clamp(1.25rem, 4vw, 3.25rem);
   line-height: 1.2;
+  position: relative;
+  z-index: 1;
+  /* subtle “LED glow” without changing layout */
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.10);
 }
 
 .ticker.ticker-lcd .ticker-track {
