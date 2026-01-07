@@ -108,21 +108,38 @@ h1, h2, h3 {
   font-weight: 600;
   margin-top: 1.8rem;
   margin-bottom: 0.5rem;
-  line-height: 1.25;
+  line-height: 1.35;
 }
 
 h1 {
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   font-weight: 400;
   font-style: italic;
+  line-height: 1.4;
+}
+
+/* Japanese/CJK titles: no italic (doesn't exist in CJK fonts) */
+:lang(ja) h1,
+:lang(zh) h1 {
+  font-style: normal;
+  font-weight: 600;
 }
 
 h2 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-variant: small-caps;
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.02em;
+}
+
+/* CJK: small-caps doesn't apply, use weight instead */
+:lang(ja) h2,
+:lang(zh) h2,
+:lang(mn) h2 {
+  font-variant: normal;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 h3 {
@@ -131,17 +148,68 @@ h3 {
   font-weight: 400;
 }
 
+:lang(ja) h3,
+:lang(zh) h3 {
+  font-style: normal;
+  font-weight: 600;
+}
+
 p {
   margin-top: 0;
   margin-bottom: 1rem;
   text-align: justify;
   hyphens: auto;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+/* CJK: no justification (looks bad), allow line breaks anywhere */
+:lang(ja) p,
+:lang(zh) p {
+  text-align: left;
+  word-break: auto-phrase;
+  line-break: strict;
+}
+
+/* Lists: better spacing for readability */
+ul, ol {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.4rem;
+  line-height: 1.6;
+}
+
+/* Blockquotes */
+blockquote {
+  margin: 1.2rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #ddd;
+  color: #444;
+  font-style: italic;
+}
+
+blockquote cite {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-style: normal;
+  color: #666;
+}
+
+:lang(ja) blockquote,
+:lang(zh) blockquote {
+  font-style: normal;
 }
 
 .meta {
   font-family: "Noto Sans", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 0.85rem;
-  color: #777;
+  color: #666;
+  margin-bottom: 0.5rem;
 }
 
 code {
