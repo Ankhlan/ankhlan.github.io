@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+  <rect width="800" height="800" fill="#111"/>
+  <g fill="#fff" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace">
+    <text x="60" y="150" font-size="44" opacity="0.9">WALL.MN</text>
+    <text x="60" y="220" font-size="26" opacity="0.8">Public LCD wall</text>
+    <text x="60" y="320" font-size="22" opacity="0.65">Post a message →</text>
+    <text x="60" y="360" font-size="22" opacity="0.65">See it on screen.</text>
+  </g>
+  <rect x="60" y="430" width="680" height="300" fill="#000" opacity="0.25"/>
+  <g fill="#fff" opacity="0.22">
+    <circle cx="90" cy="460" r="2"/><circle cx="120" cy="460" r="2"/><circle cx="150" cy="460" r="2"/><circle cx="180" cy="460" r="2"/>
+    <circle cx="90" cy="490" r="2"/><circle cx="120" cy="490" r="2"/><circle cx="150" cy="490" r="2"/><circle cx="180" cy="490" r="2"/>
+  </g>
+</svg>

@@ -8,13 +8,29 @@
 </head>
 <body class="lcd">
   <main class="lcd-screen" aria-label="LCD screen">
-    <div class="ticker ticker-lcd" data-ticker data-ticker-src="/data/ticker.json" data-prices-src="/data/prices.json" aria-label="LCD ticker">
-      <div class="ticker-viewport">
-        <div class="ticker-track">Loading…</div>
+    <div class="lcd-wall" aria-label="Wall layout">
+      <div class="lcd-lanes" aria-label="Text lanes">
+        <div class="ticker ticker-lcd lcd-lane" data-ticker data-ticker-src="/data/ticker.json" data-prices-src="/data/prices.json" aria-label="Lane 1">
+          <div class="ticker-viewport">
+            <div class="ticker-track">Loading…</div>
+          </div>
+        </div>
+
+        <div class="ticker ticker-lcd lcd-lane lcd-lane-reverse" data-ticker data-ticker-src="/data/ticker.json" data-prices-src="/data/prices.json" aria-label="Lane 2">
+          <div class="ticker-viewport">
+            <div class="ticker-track">Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lcd-squares" aria-label="Image squares" data-lcd-images data-images-src="/data/lcd_images.json">
+        <div class="lcd-square" aria-label="Image slot 1"></div>
+        <div class="lcd-square" aria-label="Image slot 2"></div>
       </div>
     </div>
   </main>
 
   <script src="/assets/js/ticker.js"></script>
+  <script src="/assets/js/lcd_images.js"></script>
 </body>
 </html>

@@ -725,12 +725,11 @@ body.lcd {
 
 .ticker.ticker-lcd {
   width: 100%;
-  min-height: 100vh;
   display: flex;
   align-items: center;
   border-radius: 0;
   background: transparent;
-  padding: 2.5rem 2.25rem;
+  padding: 0.85rem 1.25rem;
   font-size: 0.75rem;
   line-height: 1.35;
   position: relative;
@@ -745,4 +744,63 @@ body.lcd {
 
 .ticker.ticker-lcd .ticker-track {
   animation-duration: 90s;
+}
+
+/* Wall layout: two text lanes + two image squares */
+.lcd-wall {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.lcd-lanes {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 0.75rem;
+}
+
+.lcd-lane {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.lcd-lane-reverse .ticker-track {
+  animation-direction: reverse;
+}
+
+.lcd-squares {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.lcd-square {
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px) 0 0 / 10px 10px,
+    rgba(0, 0, 0, 0.18);
+  background-position: center;
+  background-repeat: repeat;
+  overflow: hidden;
+}
+
+.lcd-square.is-image {
+  background-size: cover, auto;
+  background-repeat: no-repeat, repeat;
+}
+
+@media (max-width: 680px) {
+  .lcd-wall {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  .lcd-squares {
+    gap: 0.75rem;
+  }
 }
