@@ -635,6 +635,13 @@ a:hover {
   line-height: 1.35;
 }
 
+/* Header bar variant */
+.site-header .ticker-bar {
+  flex-basis: 100%;
+  border-radius: 3px;
+  padding: 0.5rem 0.6rem;
+}
+
 .ticker-viewport {
   overflow: hidden;
   white-space: nowrap;

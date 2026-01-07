@@ -71,7 +71,12 @@ document.addEventListener('DOMContentLoaded', function () {
   wrap.appendChild(alignRow);
 
   // insert controls into header (right side)
-  header.appendChild(wrap);
+  const tickerBar = header.querySelector('.ticker-bar');
+  if (tickerBar) {
+    header.insertBefore(wrap, tickerBar);
+  } else {
+    header.appendChild(wrap);
+  }
 
   // inject minimal styles (fallback if CSS not loaded)
   const style = document.createElement('style');
