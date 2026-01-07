@@ -25,6 +25,17 @@
     el.style.backgroundImage = `url("${url}"), radial-gradient(rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px)`;
   }
 
+  function blinkSwap(el, url) {
+    // Quick “LED blink” when changing frames.
+    el.classList.add('blink');
+    window.setTimeout(function () {
+      setSquare(el, url);
+      window.setTimeout(function () {
+        el.classList.remove('blink');
+      }, 140);
+    }, 140);
+  }
+
   function initOne(container) {
     const src = container.getAttribute('data-images-src') || '/data/lcd_images.json';
     const squares = Array.from(container.querySelectorAll('.lcd-square'));
@@ -41,7 +52,7 @@
 
       for (let i = 0; i < squares.length; i++) {
         const url = urls[(idx + i) % urls.length];
-        setSquare(squares[i], url);
+        blinkSwap(squares[i], url);
       }
       idx = (idx + squares.length) % urls.length;
     }

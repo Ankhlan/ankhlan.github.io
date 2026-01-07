@@ -782,12 +782,27 @@ body.lcd {
 .lcd-square {
   aspect-ratio: 1 / 1;
   border-radius: 0;
+  position: relative;
   background:
     radial-gradient(rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px) 0 0 / 10px 10px,
     rgba(0, 0, 0, 0.18);
   background-position: center;
   background-repeat: repeat;
   overflow: hidden;
+}
+
+.lcd-square::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #111;
+  opacity: 0;
+  transition: opacity 120ms linear;
+  pointer-events: none;
+}
+
+.lcd-square.blink::after {
+  opacity: 1;
 }
 
 .lcd-square.is-image {
