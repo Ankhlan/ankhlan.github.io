@@ -48,6 +48,21 @@ body {
 
 .intro, .section-block, article { max-width: 40rem; margin-left: auto; margin-right: auto; margin-bottom: 2.5rem; }
 
+/* Alignment controls (toggled via JS on <html>) */
+html.layout-left .intro,
+html.layout-left .section-block,
+html.layout-left article {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+html.layout-center .intro,
+html.layout-center .section-block,
+html.layout-center article {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Headings */
 h1, h2, h3 {
   margin-top: 1.8rem;
@@ -93,7 +108,7 @@ html.reader-large { font-size: 19px; }
 /* Simple responsive tweaks */
 @media (max-width: 680px) {
   .margin-figure { float: none; width: 100%; margin: 0 0 1rem 0; }
-  .intro, article { padding: 0 0.5rem; }
+  .intro, .section-block, article { padding: 0 0.5rem; }
 }
 
 /* Utility */
