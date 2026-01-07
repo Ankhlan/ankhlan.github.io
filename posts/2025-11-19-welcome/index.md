@@ -1,5 +1,5 @@
 ---
-title: "Welcome"
+title: "Welcome Note"
 date: 2025-11-19
 tags: [meta]
 summary: "A short note about why this notebook exists and how it is produced."
