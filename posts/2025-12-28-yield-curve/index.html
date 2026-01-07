@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yield Curve Inversion · Notebook</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/tufte.css" />
+</head>
+<body>
+  <div class="site">
+    <header class="site-header">
+      <div class="site-title-block">
+        <a href="/" class="site-title">Notebook</a>
+        <div class="site-subtitle">Notes on money, systems, and whatever else needs a margin.</div>
+      </div>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/topics.html">Topics</a>
+        <a href="/projects.html">Projects</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+    <main class="page">
+      <article class="intro">
+        <p class="meta"><time datetime="2025-12-28">28 Dec 2025</time> · <span class="tag">yield-curve</span> <span class="tag">macro</span> <span class="tag">recession</span></p>
+        <h1>Yield Curve Inversion: What It Tells Us</h1>
+        <p>The yield curve — the relationship between interest rates and maturities — is one of the most watched indicators in macro. When short-term rates exceed long-term rates (inversion), recessions often follow.</p>
+        <h2>The current picture</h2>
+        <figure>
+          <img src="figures/yield-curve.png" alt="US Treasury yield curve" style="max-width:100%;">
+          <figcaption>US Treasury Yield Curve</figcaption>
+        </figure>
+        <p>The 2-year vs 10-year spread has been a reliable recession predictor:</p>
+        <ul>
+          <li><strong>Inverted 1978</strong> → recession 1980</li>
+          <li><strong>Inverted 1989</strong> → recession 1990</li>
+          <li><strong>Inverted 2000</strong> → recession 2001</li>
+          <li><strong>Inverted 2006</strong> → recession 2008</li>
+          <li><strong>Inverted 2022</strong> → ???</li>
+        </ul>
+        <h2>Why does it work?</h2>
+        <p>Several theories:</p>
+        <ol>
+          <li><strong>Expectations hypothesis</strong> — markets expect the Fed to cut rates due to coming weakness</li>
+          <li><strong>Risk premium</strong> — term premium compression signals flight to safety</li>
+          <li><strong>Bank lending</strong> — flat/inverted curve reduces bank profitability, tightening credit</li>
+          <li><strong>Self-fulfilling</strong> — enough people believe it that it affects behavior</li>
+        </ol>
+        <p>Probably all four contribute.</p>
+        <h2>What to watch</h2>
+        <p>The inversion itself isn't the signal — it's the <strong>re-steepening</strong> that typically precedes the recession. The curve often normalizes as the Fed begins cutting, which is when the recession arrives.</p>
+        <table>
+          <thead><tr><th>Spread</th><th>Level</th><th>Signal</th></tr></thead>
+          <tbody>
+            <tr><td>2y-10y</td><td>+15bp</td><td>Normalizing</td></tr>
+            <tr><td>3m-10y</td><td>-20bp</td><td>Still inverted</td></tr>
+            <tr><td>Fed funds - 2y</td><td>-50bp</td><td>Cuts expected</td></tr>
+          </tbody>
+        </table>
+        <h2>The lag</h2>
+        <p>Historical lag from inversion to recession: 6–24 months. This time? Unknown.</p>
+        <footer class="post-footer" style="margin-top:2rem;">
+          <p><a href="/">&larr; Back to index</a></p>
+        </footer>
+      </article>
+    </main>
+    <footer class="site-footer"><span>Static HTML. No tracking.</span></footer>
+  </div>
+</body>
+</html>

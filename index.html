@@ -2,99 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Journal Index</title>
-
-  <!-- Classic serif font -->
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notebook</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tufte.css" />
 </head>
-
 <body>
-  <div class="stage">
-    <article class="page" aria-labelledby="site-title">
-
-      <header class="page-header">
-        <nav class="main-nav" aria-label="Main navigation">
-          <a href="/index.html">Home</a>
-          <a href="/journal.html" style="margin-left:1rem">Journal</a>
-        </nav>
-
-        <h1 id="site-title">Notebook / Journal</h1>
-        <p class="meta">
-          Short notes, longer essays, and technical fragments —
-          written in a text editor and published via GitHub Pages.
-        </p>
-      </header>
-
-      <main class="content">
-        <section aria-label="Latest entries">
-          <h2>Latest posts</h2>
-          <p class="meta">Newest first. Edit this list when you add a post in <code>posts/</code>.</p>
-
-          <div class="post-list">
-
-            <!-- Example post block #1 -->
-            <article class="post-list-item">
-              <h3>
-                <a href="posts/2025-11-19-welcome.html">
-                  Welcome
-                </a>
-              </h3>
-              <time datetime="2025-11-19" class="post-date">2025-11-19</time>
-              <p class="post-excerpt">
-                A short note about why this notebook exists and how it is written:
-                plain text, Garamond, and a minimal GitHub Pages workflow.
-              </p>
-            </article>
-
-            <!-- Example post block #2 -->
-            <article class="post-list-item">
-              <h3>
-                <a href="posts/2025-11-20-monetary-systems.html">
-                  Notes on Monetary Systems
-                </a>
-              </h3>
-              <time datetime="2025-11-20" class="post-date">2025-11-20</time>
-              <p class="post-excerpt">
-                A rough sketch of money as a network of balance sheets, promises,
-                and constraints — written more like a journal entry than a paper.
-              </p>
-            </article>
-
-            <!-- Add more posts here:
-            <article class="post-list-item">
-              <h3><a href="posts/YYYY-MM-DD-slug.html">Title</a></h3>
-              <time datetime="YYYY-MM-DD" class="post-date">YYYY-MM-DD</time>
-              <p class="post-excerpt">One- or two-sentence description.</p>
-            </article>
-            -->
-
-          </div>
-        </section>
-
-        <section aria-label="All posts by year" style="margin-top:3rem;">
-          <h2>Archive</h2>
-          <p class="meta">A simple manual archive. Group posts by year as the notebook grows.</p>
-
-          <h3>2025</h3>
-          <ul class="archive-list">
-            <li>
-              <time datetime="2025-11-20">2025-11-20</time>
-              — <a href="posts/2025-11-20-monetary-systems.html">Notes on Monetary Systems</a>
-            </li>
-            <li>
-              <time datetime="2025-11-19">2025-11-19</time>
-              — <a href="posts/2025-11-19-welcome.html">Welcome</a>
-            </li>
-          </ul>
-
-          <!-- Add new years and posts as needed -->
-        </section>
-      </main>
-
-    </article>
+  <div class="site">
+    <header class="site-header">
+      <div class="site-title-block">
+        <a href="/" class="site-title">Notebook</a>
+        <div class="site-subtitle">Notes on money, systems, and whatever else needs a margin.</div>
+      </div>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="#archive">Archive</a>
+        <a href="/topics.html">Topics</a>
+        <a href="/projects.html">Projects</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+    <main class="page">
+      <section class="intro">
+        <h1>Welcome</h1>
+        <p>A working notebook from a monetary economist. Notes on reserves, gold, yield curves, FX flows, and the plumbing of financial systems.<span class="sidenote-ref" id="sn-tufte"><sup>1</sup></span></p>
+        <p class="sidenote" data-ref="sn-tufte">The layout is inspired by Tufte's margins: keep the main argument narrow, push commentary to the side.</p>
+        <p>Some entries are polished essays; most are working notes. Nothing here is investment advice.</p>
+      </section>
+      <section class="section-block">
+        <h2>Latest posts</h2>
+        <div class="post-list">
+          <article class="post-list-item">
+            <h3 class="post-title"><a href="posts/2026-01-07-reserves-overview/">Central Bank Reserves: A Quick Overview</a></h3>
+            <div class="post-meta"><time datetime="2026-01-07">07 Jan 2026</time> · <span class="tag">reserves</span> <span class="tag">central-banking</span></div>
+            <p class="post-excerpt">What central bank reserves are, why they matter, and how to track them.</p>
+          </article>
+          <article class="post-list-item">
+            <h3 class="post-title"><a href="posts/2026-01-02-dollar-liquidity/">Dollar Liquidity and the Offshore System</a></h3>
+            <div class="post-meta"><time datetime="2026-01-02">02 Jan 2026</time> · <span class="tag">fx</span> <span class="tag">monetary-system</span></div>
+            <p class="post-excerpt">How dollars flow outside the US and why offshore liquidity matters.</p>
+          </article>
+          <article class="post-list-item">
+            <h3 class="post-title"><a href="posts/2025-12-28-yield-curve/">Yield Curve Inversion: What It Tells Us</a></h3>
+            <div class="post-meta"><time datetime="2025-12-28">28 Dec 2025</time> · <span class="tag">yield-curve</span> <span class="tag">macro</span></div>
+            <p class="post-excerpt">Why the yield curve inverts before recessions and what to watch for.</p>
+          </article>
+          <article class="post-list-item">
+            <h3 class="post-title"><a href="posts/2025-12-15-gold-holdings/">Gold Holdings: Who Owns What</a></h3>
+            <div class="post-meta"><time datetime="2025-12-15">15 Dec 2025</time> · <span class="tag">gold</span> <span class="tag">reserves</span></div>
+            <p class="post-excerpt">A look at official gold holdings by central banks and how they've shifted since 2000.</p>
+          </article>
+          <article class="post-list-item">
+            <h3 class="post-title"><a href="posts/2025-11-19-welcome/">Welcome</a></h3>
+            <div class="post-meta"><time datetime="2025-11-19">19 Nov 2025</time> · <span class="tag">meta</span></div>
+            <p class="post-excerpt">A short note about why this notebook exists and how it is produced.</p>
+          </article>
+        </div>
+      </section>
+      <section id="archive" class="section-block">
+        <h2>Archive</h2>
+        <h3>2026</h3>
+        <ul class="archive-list">
+          <li><time datetime="2026-01-07">2026-01-07</time> — <a href="posts/2026-01-07-reserves-overview/">Central Bank Reserves: A Quick Overview</a></li>
+          <li><time datetime="2026-01-02">2026-01-02</time> — <a href="posts/2026-01-02-dollar-liquidity/">Dollar Liquidity and the Offshore System</a></li>
+        </ul>
+        <h3>2025</h3>
+        <ul class="archive-list">
+          <li><time datetime="2025-12-28">2025-12-28</time> — <a href="posts/2025-12-28-yield-curve/">Yield Curve Inversion: What It Tells Us</a></li>
+          <li><time datetime="2025-12-15">2025-12-15</time> — <a href="posts/2025-12-15-gold-holdings/">Gold Holdings: Who Owns What</a></li>
+          <li><time datetime="2025-11-19">2025-11-19</time> — <a href="posts/2025-11-19-welcome/">Welcome</a></li>
+        </ul>
+      </section>
+    </main>
+    <footer class="site-footer"><span>Served as static HTML from GitHub Pages.</span></footer>
   </div>
 </body>
 </html>

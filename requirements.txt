@@ -1,0 +1,3 @@
+# Python dependencies for analysis scripts
+pandas>=2.0
+matplotlib>=3.7

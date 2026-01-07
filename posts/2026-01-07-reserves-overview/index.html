@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Central Bank Reserves: A Quick Overview · Notebook</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/tufte.css" />
+</head>
+<body>
+  <div class="site">
+    <header class="site-header">
+      <div class="site-title-block">
+        <a href="/" class="site-title">Notebook</a>
+        <div class="site-subtitle">Notes on money, systems, and whatever else needs a margin.</div>
+      </div>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/topics.html">Topics</a>
+        <a href="/projects.html">Projects</a>
+        <a href="/about.html">About</a>
+      </nav>
+    </header>
+    <main class="page">
+      <article class="intro">
+        <p class="meta"><time datetime="2026-01-07">07 Jan 2026</time> · <span class="tag">reserves</span> <span class="tag">central-banking</span> <span class="tag">data</span></p>
+        <h1>Central Bank Reserves: A Quick Overview</h1>
+        <p>Central bank reserves are the assets held by a monetary authority to back liabilities (currency, bank reserves) and to intervene in markets. They typically include:</p>
+        <ul>
+          <li><strong>Foreign exchange</strong> (USD, EUR, etc.)</li>
+          <li><strong>Gold</strong> (valued at market or book price)</li>
+          <li><strong>SDRs and IMF reserve position</strong></li>
+          <li><strong>Other claims</strong> (e.g., bilateral swap lines)</li>
+        </ul>
+        <h2>Why track reserves?</h2>
+        <ol>
+          <li><strong>Policy signal:</strong> Changes in reserves reflect intervention, valuation, or portfolio shifts.</li>
+          <li><strong>Creditworthiness:</strong> For emerging markets, reserve adequacy affects sovereign risk.</li>
+          <li><strong>Systemic flows:</strong> Large moves can indicate stress or rebalancing across the system.</li>
+        </ol>
+        <h2>Data sources</h2>
+        <ul>
+          <li><strong>IMF COFER:</strong> Currency composition of official foreign exchange reserves (quarterly, aggregate).</li>
+          <li><strong>National central banks:</strong> Many publish monthly or weekly reserve data.</li>
+          <li><strong>World Gold Council:</strong> Gold holdings by central bank.</li>
+        </ul>
+        <h2>A simple chart</h2>
+        <p>The figure below shows total reserves (ex gold) for a sample of countries.</p>
+        <figure>
+          <img src="figures/reserves-ex-gold.png" alt="Reserves ex gold, selected countries" style="max-width:100%;">
+          <figcaption>FX Reserves (ex gold), Selected Countries</figcaption>
+        </figure>
+        <p>This chart is generated from <code>scripts/plot_reserves.py</code> using data in <code>data/reserves.csv</code>.</p>
+        <h2>Next steps</h2>
+        <ul>
+          <li>Track changes month-over-month.</li>
+          <li>Decompose into valuation vs. flow effects.</li>
+          <li>Compare reserve adequacy metrics (import cover, short-term debt cover).</li>
+        </ul>
+        <footer class="post-footer" style="margin-top:2rem;">
+          <p><a href="/">&larr; Back to index</a></p>
+        </footer>
+      </article>
+    </main>
+    <footer class="site-footer"><span>Static HTML. No tracking.</span></footer>
+  </div>
+</body>
+</html>

@@ -1,3 +1,4 @@
+# IDE / OS
 .vs/
 .vscode/
 *.user
@@ -5,3 +6,17 @@
 bin/
 obj/
 .DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temp / build artifacts
+*.tmp
+*.bak
