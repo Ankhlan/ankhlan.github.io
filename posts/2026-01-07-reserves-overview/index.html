@@ -25,38 +25,48 @@
       <article class="intro">
         <p class="meta"><time datetime="2026-01-07">07 Jan 2026</time> · <span class="tag">reserves</span> <span class="tag">central-banking</span> <span class="tag">data</span></p>
         <h1>Central Bank Reserves: A Quick Overview</h1>
-        <p>Central bank reserves are the assets held by a monetary authority to back liabilities (currency, bank reserves) and to intervene in markets. They typically include:</p>
+        
+        <figure class="margin-figure">
+          <img src="figures/reserves-ex-gold.png" alt="Reserves ex gold, selected countries">
+          <figcaption>FX Reserves (ex gold), Selected Countries. Source: IMF IFS.</figcaption>
+        </figure>
+        
+        <p>Central bank reserves are the assets held by a monetary authority to back liabilities (currency, bank reserves) and to intervene in markets.<span class="sidenote-number"></span></p>
+        <span class="sidenote">Reserves exclude gold here; gold holdings are tracked separately at market or book value depending on accounting convention.</span>
+        
+        <p>They typically include:</p>
         <ul>
           <li><strong>Foreign exchange</strong> (USD, EUR, etc.)</li>
           <li><strong>Gold</strong> (valued at market or book price)</li>
           <li><strong>SDRs and IMF reserve position</strong></li>
           <li><strong>Other claims</strong> (e.g., bilateral swap lines)</li>
         </ul>
+        
         <h2>Why track reserves?</h2>
+        <span class="marginnote">China stopped reporting detailed reserve composition after 2015. The COFER data shows aggregate EM allocations but not individual country breakdowns.</span>
         <ol>
           <li><strong>Policy signal:</strong> Changes in reserves reflect intervention, valuation, or portfolio shifts.</li>
           <li><strong>Creditworthiness:</strong> For emerging markets, reserve adequacy affects sovereign risk.</li>
           <li><strong>Systemic flows:</strong> Large moves can indicate stress or rebalancing across the system.</li>
         </ol>
+        
         <h2>Data sources</h2>
         <ul>
-          <li><strong>IMF COFER:</strong> Currency composition of official foreign exchange reserves (quarterly, aggregate).</li>
+          <li><strong>IMF COFER:</strong> Currency composition of official foreign exchange reserves (quarterly, aggregate).<span class="sidenote-number"></span></li>
+          <span class="sidenote">COFER coverage is ~93% of global reserves. Some large holders (notably China) are not fully broken out.</span>
           <li><strong>National central banks:</strong> Many publish monthly or weekly reserve data.</li>
           <li><strong>World Gold Council:</strong> Gold holdings by central bank.</li>
         </ul>
-        <h2>A simple chart</h2>
-        <p>The figure below shows total reserves (ex gold) for a sample of countries.</p>
-        <figure>
-          <img src="figures/reserves-ex-gold.png" alt="Reserves ex gold, selected countries" style="max-width:100%;">
-          <figcaption>FX Reserves (ex gold), Selected Countries</figcaption>
-        </figure>
-        <p>This chart is generated from <code>scripts/plot_reserves.py</code> using data in <code>data/reserves.csv</code>.</p>
+        
         <h2>Next steps</h2>
         <ul>
           <li>Track changes month-over-month.</li>
           <li>Decompose into valuation vs. flow effects.</li>
           <li>Compare reserve adequacy metrics (import cover, short-term debt cover).</li>
         </ul>
+        
+        <p class="meta" style="margin-top:1.5rem;">Chart generated from <code>scripts/plot_reserves.py</code> using data in <code>data/reserves.csv</code>.</p>
+        
         <footer class="post-footer" style="margin-top:2rem;">
           <p><a href="/">&larr; Back to index</a></p>
         </footer>

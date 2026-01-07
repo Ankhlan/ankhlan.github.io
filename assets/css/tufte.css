@@ -178,40 +178,136 @@ code {
   color: #555;
 }
 
-/* Sidenotes */
+/* Sidenotes & Margin Notes */
 .sidenote-ref {
   cursor: pointer;
 }
 
-.sidenote {
-  position: absolute;
-  max-width: 16rem;
+.sidenote,
+.marginnote {
+  float: right;
+  clear: right;
+  margin-right: -22rem;
+  width: 18rem;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
   font-size: 0.8rem;
   font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   color: #666;
   line-height: 1.4;
+  vertical-align: baseline;
+  position: relative;
 }
 
-/* Place sidenotes in the right margin on wide screens */
-@media (min-width: 980px) {
-  .intro {
-    margin-left: 0;
-  }
+.sidenote-number {
+  counter-increment: sidenote-counter;
+}
 
-  .sidenote {
-    right: 0;
-    top: 6.2rem; /* adjust per-page if needed */
+.sidenote-number::after,
+.sidenote::before {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.7rem;
+  position: relative;
+  vertical-align: super;
+}
+
+.sidenote-number::after {
+  content: counter(sidenote-counter);
+}
+
+.sidenote::before {
+  content: counter(sidenote-counter) " ";
+}
+
+/* Margin Figures - Tufte's signature feature */
+.margin-figure {
+  float: right;
+  clear: right;
+  margin-right: -22rem;
+  width: 18rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  vertical-align: baseline;
+  position: relative;
+}
+
+.margin-figure img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.margin-figure figcaption {
+  font-size: 0.75rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #666;
+  line-height: 1.4;
+  margin-top: 0.3rem;
+}
+
+/* Full-width figures (span text + margin) */
+.fullwidth-figure {
+  max-width: 60rem;
+  clear: both;
+  margin: 1.5rem 0;
+}
+
+.fullwidth-figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+.fullwidth-figure figcaption {
+  font-size: 0.8rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #666;
+  max-width: 38rem;
+  margin-top: 0.5rem;
+}
+
+/* Main column figures (default) */
+figure {
+  margin: 1.2rem 0;
+  max-width: 100%;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+figure figcaption {
+  font-size: 0.8rem;
+  font-family: "Source Sans 3", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #666;
+  margin-top: 0.4rem;
+}
+
+/* Responsive: collapse margins on smaller screens */
+@media (min-width: 1100px) {
+  article {
+    counter-reset: sidenote-counter;
   }
 }
 
-/* On smaller screens, inline sidenotes */
-@media (max-width: 979px) {
-  .sidenote {
-    position: static;
+@media (max-width: 1099px) {
+  .sidenote,
+  .marginnote,
+  .margin-figure {
+    float: none;
+    clear: both;
+    margin-right: 0;
+    width: 100%;
+    max-width: 38rem;
     display: block;
-    margin: 0.5rem 0 0.7rem;
+    margin: 0.8rem 0 1rem;
     padding-left: 0.8rem;
-    border-left: 2px solid rgba(0,0,0,0.12);
+    border-left: 2px solid rgba(0,0,0,0.08);
+  }
+  
+  .margin-figure {
+    padding-left: 0;
+    border-left: none;
   }
 }
 
