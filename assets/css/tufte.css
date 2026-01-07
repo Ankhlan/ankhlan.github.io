@@ -731,12 +731,16 @@ body.lcd {
   border-radius: 0;
   background: transparent;
   padding: 2.5rem 2.25rem;
-  font-size: clamp(1.25rem, 4vw, 3.25rem);
-  line-height: 1.2;
+  font-size: 0.75rem;
+  line-height: 1.35;
   position: relative;
   z-index: 1;
-  /* subtle “LED glow” without changing layout */
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.10);
+  /* dot-matrix vibe */
+  letter-spacing: 0.06em;
+  font-variant-ligatures: none;
+  text-shadow:
+    0 0 10px rgba(255, 255, 255, 0.08),
+    0 0 1px rgba(255, 255, 255, 0.20);
 }
 
 .ticker.ticker-lcd .ticker-track {
