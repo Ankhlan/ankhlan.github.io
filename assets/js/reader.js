@@ -19,6 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
     root.classList.remove('layout-left', 'layout-center');
     root.classList.add('layout-' + align);
     localStorage.setItem('readerAlign', align);
+
+    // Apply a scoped inline style fallback so alignment always works,
+    // even if page-specific CSS rules override margins.
+    document.querySelectorAll('main.page > .intro, main.page > .section-block, main.page > article').forEach(el => {
+      if (align === 'left') {
+        el.style.marginLeft = '0';
+        el.style.marginRight = 'auto';
+      } else {
+        el.style.marginLeft = 'auto';
+        el.style.marginRight = 'auto';
+      }
+    });
+
     document.querySelectorAll('.reader-controls button[data-align]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.align === align);
     });
