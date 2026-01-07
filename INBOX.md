@@ -4,6 +4,14 @@ GitHub Pages is static, so SMS/email/Viber can’t write to the site directly.
 
 Instead, send messages into GitHub, which updates `data/ticker.json`. The site reads that JSON at runtime.
 
+This feed powers:
+- The ticker shown across the site
+- The full-screen wall at `/lcd.html`
+
+## Optional: prices placeholders
+
+If you include placeholders like `{PRICE:BTCUSD}` in ticker messages, the ticker will try to replace them using `data/prices.json`.
+
 ## Option A (manual): run workflow
 
 - Go to GitHub → repo → **Actions** → **Ticker Inbox** → **Run workflow**
