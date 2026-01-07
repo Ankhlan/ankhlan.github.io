@@ -46,7 +46,7 @@ body {
 /* Page / content layout */
 .page { padding: 0 1rem; }
 
-.intro, .section-block, article { max-width: 40rem; margin-left: 0; margin-right: auto; margin-bottom: 2.5rem; }
+.intro, .section-block, article { max-width: 40rem; margin-left: auto; margin-right: auto; margin-bottom: 2.5rem; }
 
 /* Headings */
 h1, h2, h3 {
@@ -165,18 +165,12 @@ html.reader-large { font-size: 19px; }
 .section-block,
 article {
   max-width: 40rem;
-  margin-left: 0;
+  margin-left: auto;
   margin-right: auto;
   margin-bottom: 2.5rem;
 }
 
-/* Right-aligned aesthetic (opt-in via <html class="layout-right">) */
-.layout-right .intro,
-.layout-right .section-block,
-.layout-right article {
-  margin-left: auto;
-  margin-right: 0;
-}
+/* Right-aligned aesthetic removed (centered layout is the default). */
 
 /* Typography */
 h1, h2, h3 {
@@ -370,13 +364,6 @@ code {
   position: relative;
 }
 
-.layout-right .sidenote,
-.layout-right .marginnote {
-  float: left;
-  clear: left;
-  margin-right: 0;
-  margin-left: -21rem;
-}
 
 .sidenote-number {
   counter-increment: sidenote-counter;
@@ -410,12 +397,6 @@ code {
   position: relative;
 }
 
-.layout-right .margin-figure {
-  float: left;
-  clear: left;
-  margin-right: 0;
-  margin-left: -21rem;
-}
 
 .margin-figure img {
   max-width: 100%;
