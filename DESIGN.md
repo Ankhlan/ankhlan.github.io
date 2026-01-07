@@ -110,6 +110,33 @@ Core tags (expand as needed):
 
 Tufte's philosophy: **the reader's eye should flow down the main argument** while supporting material (notes, small figures, commentary) lives in the margin. This creates a layered reading experience.
 
+### Markdown vs HTML
+
+**Standard Markdown `![]()`** produces a plain `<figure>` in HTML — this stays in the main column. For margin placement, you have two options:
+
+1. **Write HTML directly in Markdown** (works with most processors):
+   ```markdown
+   Here is the main text.
+   
+   <figure class="margin-figure">
+     <img src="figures/chart.png" alt="...">
+     <figcaption>Caption</figcaption>
+   </figure>
+   
+   The text continues flowing here.
+   ```
+
+2. **Use Pandoc attributes** (if using pandoc with `+fenced_divs`):
+   ```markdown
+   ::: {.margin-figure}
+   ![Caption](figures/chart.png)
+   :::
+   ```
+
+3. **Post-process**: Write plain markdown, then the build script converts images matching a pattern (e.g., `*-margin.png`) to margin figures.
+
+**Recommendation**: For maximum control, write HTML for margin figures directly in your `.md` file. Markdown parsers pass through HTML unchanged.
+
 ### Figure Types
 
 | Type | HTML Class | When to Use |
@@ -120,7 +147,7 @@ Tufte's philosophy: **the reader's eye should flow down the main argument** whil
 
 ### HTML Patterns
 
-**Margin figure** (floats right, ~280px wide):
+**Margin figure** (floats right, ~270px wide):
 ```html
 <figure class="margin-figure">
   <img src="figures/small-chart.png" alt="Description">
@@ -154,20 +181,20 @@ Generate figures at appropriate sizes for each use case:
 ```python
 import matplotlib.pyplot as plt
 
-# For margin figures: narrow, compact
+# For margin figures: narrow, compact (~270px displayed)
 fig, ax = plt.subplots(figsize=(4, 3), dpi=150)
 # ... plot ...
-fig.savefig('figures/margin-chart.png', bbox_inches='tight', facecolor='#fdfaf5')
+fig.savefig('figures/margin-chart.png', bbox_inches='tight', facecolor='white')
 
-# For main column: medium width
+# For main column: medium width (~570px)
 fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
 # ... plot ...
-fig.savefig('figures/main-chart.png', bbox_inches='tight', facecolor='#fdfaf5')
+fig.savefig('figures/main-chart.png', bbox_inches='tight', facecolor='white')
 
-# For full-width: wide format
+# For full-width: wide format (~880px)
 fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
 # ... plot ...
-fig.savefig('figures/fullwidth-chart.png', bbox_inches='tight', facecolor='#fdfaf5')
+fig.savefig('figures/fullwidth-chart.png', bbox_inches='tight', facecolor='white')
 ```
 
 **Style settings for Tufte aesthetics:**
@@ -182,8 +209,11 @@ plt.rcParams.update({
     'xtick.labelsize': 8,
     'ytick.labelsize': 8,
     'legend.fontsize': 8,
-    'figure.facecolor': '#fdfaf5',
-    'axes.facecolor': '#fdfaf5',
+    'figure.facecolor': 'white',
+    'axes.facecolor': 'white',
+    'axes.grid': True,
+    'grid.alpha': 0.3,
+    'grid.linewidth': 0.5,
 })
 ```
 

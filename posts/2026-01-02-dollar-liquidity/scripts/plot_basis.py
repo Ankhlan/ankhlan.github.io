@@ -33,7 +33,7 @@ def main():
     ax.annotate("COVID stress", xy=(pd.Timestamp("2020-03-15"), -100), fontsize=8, ha="center")
     
     FIG_PATH.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(FIG_PATH, dpi=150, bbox_inches="tight")
+    fig.savefig(FIG_PATH, dpi=150, bbox_inches="tight", facecolor="white")
     print(f"Saved {FIG_PATH}")
 
 if __name__ == "__main__":
