@@ -69,11 +69,10 @@ h1, h2, h3 {
   margin-bottom: 0.5rem;
   line-height: 1.35;
   font-weight: 600;
-  font-family: "Noto Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 h1 { font-size: 1.8rem; font-style: normal; font-weight: 600; }
-h2 { font-size: 1.2rem; font-variant: normal; font-weight: 600; }
+h2 { font-size: 1.2rem; font-variant: small-caps; font-weight: 600; }
 h3 { font-size: 1.05rem; font-style: normal; font-weight: 600; }
 
 /* Language-specific adjustments using attribute selectors (better cross-browser compatibility) */
@@ -194,7 +193,6 @@ h1, h2, h3 {
   margin-top: 1.8rem;
   margin-bottom: 0.5rem;
   line-height: 1.35;
-  font-family: "Noto Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 h1 {
@@ -213,7 +211,7 @@ h1 {
 
 h2 {
   font-size: 1.2rem;
-  font-variant: normal;
+  font-variant: small-caps;
   font-style: normal;
   font-weight: 600;
   letter-spacing: 0.02em;
