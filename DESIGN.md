@@ -28,11 +28,82 @@ Tone: precise, skeptical, first-principles. Not a blog — a notebook of working
 ## Visual Design
 
 - **Layout:** Tufte-inspired — narrow text column (~600px), wide right margin for sidenotes.
-- **Typography:** Serif body (EB Garamond), sans-serif headings/nav (Source Sans 3).
+- **Typography:** Serif body (Noto Serif), sans-serif UI/meta (Noto Sans). Headings currently inherit the serif body font.
 - **Color:** Near-black text on off-white; muted accent for links; no heavy colors.
 - **Charts:** Clean, minimal — matplotlib with seaborn whitegrid or custom style; consistent sizing.
 
+### Fonts (what you use today)
+
+Fonts are loaded from Google Fonts in pages like [index.html](index.html) and [templates/post.html](templates/post.html):
+
+- **Noto Serif** (Latin) — body text, headings (via inheritance), site title
+- **Noto Serif JP** — Japanese serif fallback when the page `lang="ja"` and glyphs require it
+- **Noto Sans** (Latin) — navigation, metadata, sidenotes/margin notes, captions, tags
+- **Noto Sans JP** — Japanese sans fallback for UI/meta/captions when `lang="ja"`
+
+In CSS, the main assignments live in [assets/css/tufte.css](assets/css/tufte.css):
+
+- `body { font-family: "Noto Serif", ... }` → default reading font
+- `.site-nav`, `.meta`, `.site-subtitle`, `.tag`, sidenotes/figcaptions → use Noto Sans stacks
+- `code { font-family: "Source Code Pro", ui-monospace, ... }` → *uses Source Code Pro only if installed locally* (it is not currently loaded from Google Fonts)
+
+### Font options (simple choices)
+
+You basically have three stable options:
+
+1) **Current (recommended for multilingual):** Noto Serif body + Noto Sans UI/meta.
+2) **More “editorial”:** keep body serif, switch only `h1/h2/h3` to Noto Sans (we tested this as “Option C”; easy to re-enable later).
+3) **All-serif:** use Noto Serif everywhere (nav/meta included). Very bookish; less “instrument panel”.
+
 ---
+
+## Design Standards (so new posts are easy)
+
+The goal is that when you add a post, you only touch:
+
+- `posts/YYYY-MM-DD-slug/` (your text, data, scripts, figures)
+- (optional) a generator step that refreshes index pages
+
+### Writing standard
+
+- **Title case:** sentence case or headline case, but be consistent per post.
+- **Open with one clear paragraph** stating: what it is + why it matters.
+- **Use `##` sections** for structure. Avoid deep nesting unless needed.
+- **Keep emphasis sparse:** bold for key terms; italics mostly for quotations/citations.
+
+### Figures & captions standard
+
+Use one of three figure placements:
+
+- **Main column**: normal Markdown image or `<figure>` (primary charts)
+- **Margin figure**: `<figure class="margin-figure">` (supporting chart)
+- **Full-width**: `<figure class="fullwidth-figure">` (multi-panel / dense)
+
+Caption convention (works well over time):
+
+`Title. Source: _____. Notes: _____.`
+
+Example (already used in the generated HTML):
+
+`FX Reserves (ex gold), Selected Countries. Source: IMF IFS.`
+
+### Chart standard (matplotlib)
+
+- **Figure sizes** (pick one per plot):
+  - Margin: `figsize=(4, 3)`
+  - Main: `figsize=(7, 4)`
+  - Full-width: `figsize=(10, 4)`
+- **Titles:** short; include unit context in axis label (not the title).
+- **Axes:** hide top/right spines; light grid (`alpha≈0.3`).
+- **Legend:** only if you truly need it; keep small.
+- **Colors:** prefer one highlight series + grays for the rest (your code already does this in places).
+
+### Tables standard
+
+- Keep tables small: prefer 3–5 columns.
+- Right-align numeric columns in Markdown when possible.
+- Always include units in the column header (`USD bn`, `%`, `bp`).
+- If a table is large, convert it to a figure (or split into multiple tables).
 
 ## Content Workflow
 
@@ -77,6 +148,8 @@ posts/<slug>/
 - **Add scripts** to `posts/<slug>/scripts/`
 - **Run** `tools/build.ps1` to regenerate all articles
 - **Commit** and push; GitHub Pages serves static HTML
+
+Note: [tools/generate_index.py](tools/generate_index.py) currently prints a post index but does not rewrite `index.html` / `topics.html` yet. If you want “add a post → run build → done”, the next step is to extend it to regenerate those index pages from frontmatter.
 
 ---
 
