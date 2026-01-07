@@ -494,6 +494,33 @@ a:hover {
   text-decoration-color: #1a1a1a;
 }
 
+/* Reader size controls: root classes adjusted by JS */
+.reader-compact article,
+.reader-compact .intro,
+.reader-compact .section-block {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.reader-comfortable article,
+.reader-comfortable .intro,
+.reader-comfortable .section-block {
+  font-size: 1.03rem;
+  line-height: 1.8;
+}
+
+.reader-large article,
+.reader-large .intro,
+.reader-large .section-block {
+  font-size: 1.12rem;
+  line-height: 1.95;
+}
+
+/* Reader controls position tweak for narrow screens */
+@media (max-width: 800px) {
+  .reader-controls { margin-left: 0.5rem; }
+}
+
 /* Tags */
 .tag {
   font-family: "Noto Sans", "Noto Sans JP", "Helvetica Neue", Helvetica, Arial, sans-serif;
