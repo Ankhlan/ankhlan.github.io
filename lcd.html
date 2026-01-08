@@ -2,12 +2,18 @@
 <html lang="en" class="lcd">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>LCD · Notebook</title>
   <link rel="stylesheet" href="assets/css/tufte.css" />
 </head>
 <body class="lcd">
-  <main class="lcd-screen" aria-label="LCD screen">
+  <main class="lcd-screen" aria-label="LCD display">
+    <!-- Header with time + branding -->
+    <div class="lcd-header">
+      <div class="lcd-branding">⌚ NOTEBOOK</div>
+      <div class="lcd-clock" data-clock>00:00</div>
+    </div>
+
     <div class="lcd-wall" aria-label="Wall layout">
       <!-- Top: ticker feed -->
       <div class="lcd-ticker-section">
@@ -22,7 +28,7 @@
       <div class="lcd-dashboard">
         <!-- Prices column -->
         <div class="lcd-widget lcd-prices" data-lcd-prices data-prices-src="/data/prices.json" aria-label="Prices">
-          <div class="lcd-widget-header">Prices</div>
+          <div class="lcd-widget-header">💰 Prices</div>
           <div class="lcd-widget-body">
             <div class="price-item">
               <span class="price-label">BTC</span>
@@ -41,7 +47,7 @@
 
         <!-- Weather column -->
         <div class="lcd-widget lcd-weather" data-lcd-weather data-weather-src="/data/weather.json" aria-label="Weather">
-          <div class="lcd-widget-header">Weather</div>
+          <div class="lcd-widget-header">🌤️ Weather</div>
           <div class="lcd-widget-body">
             <div class="weather-item">
               <span class="weather-label">Temp</span>
@@ -60,7 +66,7 @@
 
         <!-- Polls/Info column -->
         <div class="lcd-widget lcd-info" data-lcd-polls data-polls-src="/data/polls.json" aria-label="Polls">
-          <div class="lcd-widget-header">Poll <span class="poll-timer" data-timer="30">30s</span></div>
+          <div class="lcd-widget-header">📊 Poll <span class="poll-timer" data-timer="30">30s</span></div>
           <div class="lcd-widget-body">
             <div class="poll-content">
               <div class="poll-left">
@@ -80,8 +86,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Footer status bar -->
+    <div class="lcd-footer">
+      <span class="lcd-status" data-status>● LIVE</span>
+      <span class="lcd-refresh-rate">60fps</span>
+    </div>
   </main>
 
+  <script src="/assets/js/lcd_clock.js"></script>
   <script src="/assets/js/ticker.js"></script>
   <script src="/assets/js/lcd_prices.js"></script>
   <script src="/assets/js/lcd_weather.js"></script>
