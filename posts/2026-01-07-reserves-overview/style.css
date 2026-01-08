@@ -1,0 +1,563 @@
+/* 
+  Central Bank Reserves: An Art & Consciousness Piece
+  Author: Ankhlan
+  Purpose: Real-time circular visualization of Mongolian reserves as a political engagement tool
+  Inspired by: Mongolian circular cosmology, eternal cycle, collective consciousness
+*/
+
+:root {
+  /* Mongolian color palette: earth, sky, tradition */
+  --color-gold: #D4AF37;
+  --color-silver: #C0C0C0;
+  --color-blue: #1E90FF;
+  --color-earth: #8B4513;
+  --color-fire: #FF6347;
+  --color-sky: #87CEEB;
+  --color-dark: #0a0a0a;
+  --color-light: #f5f1e8;
+  
+  /* Animation rhythm (like Mongolian drum cycles) */
+  --pulse-slow: 3s;
+  --pulse-normal: 1.5s;
+  --pulse-fast: 0.75s;
+  
+  /* Typography */
+  --font-header: "Noto Serif", Georgia, serif;
+  --font-body: "Noto Sans", Helvetica, Arial, sans-serif;
+  --font-mono: "Courier New", Menlo, Monaco, monospace;
+}
+
+/* Page structure */
+html.reserves-art {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  color: var(--color-light);
+}
+
+body.reserves-art {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background: var(--color-dark);
+  color: var(--color-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.reserves-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+.reserves-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  border-bottom: 2px solid var(--color-gold);
+  padding-bottom: 2rem;
+}
+
+.reserves-header h1 {
+  font-family: var(--font-header);
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.05em;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-silver), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer var(--pulse-slow) ease-in-out infinite;
+}
+
+.reserves-header .subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  margin: 0.5rem 0 0 0;
+}
+
+.reserves-header .meta {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 1rem;
+}
+
+/* Main circular visualization */
+.circular-loop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 500px;
+  margin: 2rem 0;
+  perspective: 1000px;
+}
+
+.reserves-circle {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  border: 3px solid var(--color-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.1), transparent);
+  box-shadow: 
+    0 0 40px rgba(212, 175, 55, 0.4),
+    inset 0 0 40px rgba(212, 175, 55, 0.1),
+    0 0 80px rgba(30, 144, 255, 0.2);
+  animation: breathe var(--pulse-slow) ease-in-out infinite;
+}
+
+.reserves-circle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(212, 175, 55, 0.3);
+  animation: rotate 20s linear infinite;
+}
+
+.reserves-circle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed rgba(30, 144, 255, 0.2);
+  animation: rotate -15s linear infinite;
+}
+
+.circle-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.circle-center-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--color-gold);
+  margin: 0;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+  animation: pulse-text var(--pulse-normal) ease-in-out infinite;
+}
+
+.circle-center-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.5rem;
+}
+
+.circle-center-unit {
+  font-size: 0.75rem;
+  color: rgba(212, 175, 55, 0.8);
+  margin-top: 0.25rem;
+}
+
+/* Orbiting segments around circle */
+.orbit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.segment {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.segment:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px currentColor;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.segment-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin-bottom: 0.25rem;
+}
+
+.segment-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Segment colors representing reserve types */
+.segment-fx {
+  border-color: var(--color-blue);
+  color: var(--color-blue);
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.segment-gold {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+  top: -20px;
+  right: -40px;
+  transform: rotate(60deg);
+}
+
+.segment-sdr {
+  border-color: var(--color-silver);
+  color: var(--color-silver);
+  bottom: -20px;
+  right: -40px;
+  transform: rotate(120deg);
+}
+
+.segment-other {
+  border-color: var(--color-fire);
+  color: var(--color-fire);
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.segment-crypto {
+  border-color: var(--color-sky);
+  color: var(--color-sky);
+  bottom: -20px;
+  left: -40px;
+  transform: rotate(-120deg);
+}
+
+.segment-citizen {
+  border-color: #90EE90;
+  color: #90EE90;
+  top: -20px;
+  left: -40px;
+  transform: rotate(-60deg);
+}
+
+/* Info grid below circle */
+.reserves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding: 2rem 1rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.reserve-card {
+  padding: 1.5rem;
+  border-left: 3px solid;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.reserve-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.reserve-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.reserve-card .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  margin: 0.5rem 0;
+}
+
+.reserve-card .change {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.reserve-card .change.positive {
+  color: #90EE90;
+}
+
+.reserve-card .change.negative {
+  color: var(--color-fire);
+}
+
+.reserve-card .change.neutral {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.card-fx { border-left-color: var(--color-blue); }
+.card-gold { border-left-color: var(--color-gold); }
+.card-sdr { border-left-color: var(--color-silver); }
+.card-other { border-left-color: var(--color-fire); }
+
+/* Real-time status indicator */
+.live-indicator {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #90EE90;
+  z-index: 1000;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #90EE90;
+  box-shadow: 0 0 10px #90EE90;
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes breathe {
+  0%, 100% { 
+    box-shadow: 
+      0 0 40px rgba(212, 175, 55, 0.4),
+      inset 0 0 40px rgba(212, 175, 55, 0.1),
+      0 0 80px rgba(30, 144, 255, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 0 60px rgba(212, 175, 55, 0.6),
+      inset 0 0 50px rgba(212, 175, 55, 0.2),
+      0 0 120px rgba(30, 144, 255, 0.4);
+  }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes pulse-text {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 40px rgba(212, 175, 55, 0.8);
+    transform: scale(1.05);
+  }
+}
+
+/* Text content section */
+.reserves-text {
+  margin-top: 3rem;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.reserves-text h2 {
+  font-family: var(--font-header);
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid var(--color-gold);
+  padding-left: 1rem;
+}
+
+.reserves-text h3 {
+  font-family: var(--font-header);
+  font-size: 1.2rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-gold);
+}
+
+.reserves-text p {
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.reserves-text ul, .reserves-text ol {
+  margin-left: 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.reserves-text li {
+  margin-bottom: 0.5rem;
+}
+
+.reserves-text strong {
+  color: var(--color-gold);
+}
+
+.reserves-text em {
+  color: var(--color-silver);
+  font-style: italic;
+}
+
+/* Call to action: public engagement */
+.engagement-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(30, 144, 255, 0.1));
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.engagement-section h3 {
+  font-size: 1.3rem;
+  color: var(--color-gold);
+  margin-top: 0;
+}
+
+.engagement-section p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-silver));
+  color: var(--color-dark);
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.5);
+}
+
+/* Footer */
+.reserves-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.reserves-footer p {
+  margin: 0.5rem 0;
+}
+
+.data-timestamp {
+  font-family: var(--font-mono);
+  color: rgba(212, 175, 55, 0.7);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .reserves-header h1 {
+    font-size: 2rem;
+  }
+
+  .reserves-circle {
+    width: 280px;
+    height: 280px;
+  }
+
+  .segment {
+    width: 60px;
+    height: 60px;
+    font-size: 0.6rem;
+  }
+
+  .segment-value {
+    font-size: 0.9rem;
+  }
+
+  .reserves-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .reserves-text {
+    font-size: 0.95rem;
+  }
+
+  .reserves-text h2 {
+    font-size: 1.3rem;
+  }
+
+  .live-indicator {
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .reserves-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .reserves-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .reserves-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .reserves-circle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .circle-center-value {
+    font-size: 1.8rem;
+  }
+
+  .reserves-grid {
+    padding: 1rem 0.5rem;
+  }
+}

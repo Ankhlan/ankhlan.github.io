@@ -1,0 +1,43 @@
+{
+  "total": 3850,
+  "unit": "USD Millions",
+  "components": [
+    {
+      "label": "Foreign Exchange",
+      "value": 2400,
+      "key": "fx",
+      "change": 0.5,
+      "percentage": 62.3,
+      "description": "USD, EUR, CNY holdings for market intervention"
+    },
+    {
+      "label": "Gold",
+      "value": 850,
+      "key": "gold",
+      "change": -0.2,
+      "percentage": 22.1,
+      "description": "Physical gold reserves as ultimate store of value"
+    },
+    {
+      "label": "SDRs & IMF Reserve Position",
+      "value": 450,
+      "key": "sdr",
+      "change": 0,
+      "percentage": 11.7,
+      "description": "International purchasing power via IMF"
+    },
+    {
+      "label": "Other Assets",
+      "value": 150,
+      "key": "other",
+      "change": 1.2,
+      "percentage": 3.9,
+      "description": "Bilateral swap lines and other claims"
+    }
+  ],
+  "mongoliaCitizenEngagement": 42,
+  "timestamp": "2026-01-08T12:00:00Z",
+  "lastUpdated": "2026-01-08T12:00:00Z",
+  "source": "Bank of Mongolia Official Reports",
+  "note": "Data updated live every 5 seconds. Percentages calculated from component values."
+}
