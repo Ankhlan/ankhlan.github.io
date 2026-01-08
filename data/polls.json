@@ -1,0 +1,14 @@
+{
+  "polls": [
+    {
+      "question": "Will BTC hit $60k this year?",
+      "options": ["Yes", "No"],
+      "votes": [65, 35]
+    },
+    {
+      "question": "Next rate: Up or Down?",
+      "options": ["Up", "Down"],
+      "votes": [45, 55]
+    }
+  ]
+}

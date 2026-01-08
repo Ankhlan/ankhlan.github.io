@@ -9,28 +9,82 @@
 <body class="lcd">
   <main class="lcd-screen" aria-label="LCD screen">
     <div class="lcd-wall" aria-label="Wall layout">
-      <div class="lcd-lanes" aria-label="Text lanes">
-        <div class="ticker ticker-lcd lcd-lane" data-ticker data-ticker-src="/data/ticker.json" data-prices-src="/data/prices.json" aria-label="Lane 1">
-          <div class="ticker-viewport">
-            <div class="ticker-track">Loading…</div>
-          </div>
-        </div>
-
-        <div class="ticker ticker-lcd lcd-lane lcd-lane-reverse" data-ticker data-ticker-src="/data/ticker.json" data-prices-src="/data/prices.json" aria-label="Lane 2">
+      <!-- Top: ticker feed -->
+      <div class="lcd-ticker-section">
+        <div class="ticker ticker-lcd" data-ticker data-ticker-src="/data/ticker.json" data-prices-src="/data/prices.json" aria-label="Ticker feed">
           <div class="ticker-viewport">
             <div class="ticker-track">Loading…</div>
           </div>
         </div>
       </div>
 
-      <div class="lcd-squares" aria-label="Image squares" data-lcd-images data-images-src="/data/lcd_images.json">
-        <div class="lcd-square" aria-label="Image slot 1"></div>
-        <div class="lcd-square" aria-label="Image slot 2"></div>
+      <!-- Bottom: 3-column dashboard -->
+      <div class="lcd-dashboard">
+        <!-- Prices column -->
+        <div class="lcd-widget lcd-prices" data-lcd-prices data-prices-src="/data/prices.json" aria-label="Prices">
+          <div class="lcd-widget-header">Prices</div>
+          <div class="lcd-widget-body">
+            <div class="price-item">
+              <span class="price-label">BTC</span>
+              <span class="price-value">—</span>
+            </div>
+            <div class="price-item">
+              <span class="price-label">XAU</span>
+              <span class="price-value">—</span>
+            </div>
+            <div class="price-item">
+              <span class="price-label">EUR</span>
+              <span class="price-value">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather column -->
+        <div class="lcd-widget lcd-weather" data-lcd-weather data-weather-src="/data/weather.json" aria-label="Weather">
+          <div class="lcd-widget-header">Weather</div>
+          <div class="lcd-widget-body">
+            <div class="weather-item">
+              <span class="weather-label">Temp</span>
+              <span class="weather-value">—°C</span>
+            </div>
+            <div class="weather-item">
+              <span class="weather-label">Humidity</span>
+              <span class="weather-value">—%</span>
+            </div>
+            <div class="weather-item">
+              <span class="weather-label">Wind</span>
+              <span class="weather-value">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Polls/Info column -->
+        <div class="lcd-widget lcd-info" data-lcd-polls data-polls-src="/data/polls.json" aria-label="Polls">
+          <div class="lcd-widget-header">Poll <span class="poll-timer" data-timer="30">30s</span></div>
+          <div class="lcd-widget-body">
+            <div class="poll-content">
+              <div class="poll-left">
+                <div class="poll-item">
+                  <span class="poll-q">Q: Loading…</span>
+                </div>
+                <div class="poll-options">
+                  <div class="poll-opt">A: <span class="poll-count">—</span></div>
+                  <div class="poll-opt">B: <span class="poll-count">—</span></div>
+                </div>
+              </div>
+              <div class="poll-qr">
+                <img class="poll-qr-code" src="" alt="Vote QR code" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
 
   <script src="/assets/js/ticker.js"></script>
-  <script src="/assets/js/lcd_images.js"></script>
+  <script src="/assets/js/lcd_prices.js"></script>
+  <script src="/assets/js/lcd_weather.js"></script>
+  <script src="/assets/js/lcd_polls.js"></script>
 </body>
 </html>

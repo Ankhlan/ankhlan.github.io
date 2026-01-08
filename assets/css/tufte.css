@@ -747,7 +747,7 @@ body.lcd {
   animation-duration: 90s;
 }
 
-/* Wall layout: two text lanes + two image squares */
+/* Wall layout: ticker + 3-column dashboard */
 .lcd-wall {
   position: relative;
   z-index: 1;
@@ -755,61 +755,148 @@ body.lcd {
   min-height: 100vh;
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto 1fr;
   gap: 1rem;
   padding: 1.25rem;
 }
 
-.lcd-lanes {
+/* Top section: ticker */
+.lcd-ticker-section {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 1rem;
+}
+
+.lcd-ticker-section .ticker-lcd {
+  flex: 1;
+  padding: 0.75rem 0;
+  min-height: auto;
+}
+
+.lcd-ticker-section .ticker-lcd .ticker-track {
+  animation-duration: 70s;
+}
+
+/* Bottom section: 3-column dashboard */
+.lcd-dashboard {
   display: grid;
-  grid-template-rows: auto auto;
-  gap: 0.75rem;
-}
-
-.lcd-lane {
-  background: rgba(0, 0, 0, 0.18);
-}
-
-.lcd-lane-reverse .ticker-track {
-  animation-direction: reverse;
-}
-
-.lcd-squares {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
-  align-items: stretch;
 }
 
-.lcd-square {
-  aspect-ratio: 1 / 1;
+.lcd-widget {
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 0;
-  position: relative;
-  background:
-    radial-gradient(rgba(255, 255, 255, 0.08) 1px, rgba(0, 0, 0, 0) 1px) 0 0 / 10px 10px,
-    rgba(0, 0, 0, 0.18);
-  background-position: center;
-  background-repeat: repeat;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
 }
 
-.lcd-square::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #111;
-  opacity: 0;
-  transition: opacity 120ms linear;
-  pointer-events: none;
+.lcd-widget-header {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.lcd-square.blink::after {
-  opacity: 1;
+.lcd-widget-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.85rem 0.75rem;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  gap: 0.55rem;
 }
 
-.lcd-square.is-image {
-  background-size: cover, auto;
-  background-repeat: no-repeat, repeat;
+.price-item, .weather-item, .poll-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.price-label, .weather-label {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price-value, .weather-value {
+  flex: 0 1 auto;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.95);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas;
+  font-weight: 600;
+}
+
+.poll-timer {
+  float: right;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.poll-content {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.poll-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.poll-q {
+  display: block;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.68rem;
+  margin: 0;
+}
+
+.poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.poll-opt {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.poll-count {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.poll-qr {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.poll-qr-code {
+  width: 70px;
+  height: 70px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
 }
 
 @media (max-width: 680px) {
@@ -820,14 +907,8 @@ body.lcd {
       calc(0.85rem + env(safe-area-inset-left, 0px));
     gap: 0.75rem;
   }
-  .lcd-lanes {
-    gap: 0.6rem;
-  }
-  .lcd-squares {
+  .lcd-dashboard {
     grid-template-columns: 1fr;
     gap: 0.75rem;
-  }
-  .lcd-square {
-    aspect-ratio: 16 / 9;
   }
 }
