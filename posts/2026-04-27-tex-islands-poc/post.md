@@ -1,6 +1,6 @@
----
-title: "TeX islands in HTML — proof of concept"
-date: 2026-04-27
+ ---
+title: "TeX islands in HTML and Real Time writing system — proof of concept"
+date: 2026-04-28
 tags: [meta, infrastructure]
 summary: "First post in the new pipeline. Prose flows in HTML; equations and TikZ figures render as TeX-quality SVG islands."
 ---
@@ -57,9 +57,9 @@ A stylised yield curve, drawn in TikZ at build time:
 \end{document}
 ```
 
-## Why this works
+## More on the real-time writing
 
-The whole post lives in one file. The TeX source for each island is right
+Live TeXing once was one of the hardest things to create in real time. The whole post lives in one file. Now in the new agentic era we can compose research crunch data at the speed of thought in real time. And publish at real time. 
 where the prose references it; there is no separate `figures/` folder to keep
 in sync, no `\includegraphics{}` to chase down. Editing an equation is editing
 the markdown; the build watcher recompiles only the islands whose source
@@ -68,3 +68,7 @@ changed (cached by content hash) and reloads the page.
 The web does prose well. TeX does math and diagrams well. The seam between
 them is an `<object>` tag — small, honest, and entirely under the author's
 control.
+
+> Demo edit from the agent — if you can read this in your writer without -- I can see this.
+> having typed it, the live agent–editor loop is working. I dont see agent conversing with me on this code!
+Aha you can read my code edits! but your spawninnig ghost agent just died!

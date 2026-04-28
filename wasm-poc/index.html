@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Writing POC — pure WASM</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
+  <script src="https://tikzjax.com/v1/tikzjax.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #faf8f3;
+      --fg: #2b2a26;
+      --bg-2: #efece2;
+      --rule: #d6d2c2;
+      --muted: #6b6757;
+      --accent: #b85c00;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: "Noto Serif", Georgia, serif;
+      color: var(--fg);
+      background: var(--bg);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "header header"
+        "editor preview"
+        "status status";
+      height: 100vh;
+    }
+    header {
+      grid-area: header;
+      padding: 0.5rem 1rem;
+      background: #2b2a26;
+      color: var(--bg);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: "Noto Sans", system-ui, sans-serif;
+      font-size: 0.85rem;
+    }
+    header .title { font-weight: 600; flex-grow: 0; margin-right: 1.2rem; }
+    header button {
+      background: #1f1e1a;
+      border: 1px solid #555047;
+      color: var(--bg);
+      padding: 0.25rem 0.7rem;
+      cursor: pointer;
+      font: inherit;
+      border-radius: 2px;
+    }
+    header button:hover { background: #383631; }
+    header .filename { margin-left: auto; opacity: 0.7; font-style: italic; }
+
+    #editor-pane {
+      grid-area: editor;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+    #editor {
+      flex: 1;
+      width: 100%;
+      border: none;
+      outline: none;
+      padding: 1rem 1.4rem;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Source Code Pro", Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.55;
+      resize: none;
+      tab-size: 2;
+    }
+
+    #preview-pane {
+      grid-area: preview;
+      overflow: auto;
+      padding: 1.5rem 2rem;
+      background: var(--bg);
+    }
+    #preview { max-width: 720px; line-height: 1.55; }
+    #preview h1 { font-size: 1.8rem; margin-top: 0; }
+    #preview h2 { font-size: 1.3rem; margin-top: 1.8rem; }
+    #preview p { margin: 0.8rem 0; }
+    #preview code {
+      font-family: "Source Code Pro", Consolas, monospace;
+      font-size: 0.9em;
+      background: var(--bg-2);
+      padding: 0.05em 0.35em;
+      border-radius: 2px;
+    }
+    #preview pre {
+      background: var(--bg-2);
+      padding: 0.8rem 1rem;
+      overflow-x: auto;
+      font-size: 0.85em;
+    }
+    #preview .tex-island {
+      display: block;
+      margin: 1.2rem auto;
+      text-align: center;
+    }
+    #preview .tex-island.error {
+      color: #b85c00;
+      background: #fff5e8;
+      padding: 0.5rem 1rem;
+      border-left: 3px solid var(--accent);
+      font-family: monospace;
+      font-size: 0.85em;
+      text-align: left;
+    }
+
+    footer#status {
+      grid-area: status;
+      background: var(--bg-2);
+      color: var(--muted);
+      padding: 0.3rem 1rem;
+      font-family: "Noto Sans", system-ui, sans-serif;
+      font-size: 0.78rem;
+      display: flex;
+      gap: 1.5rem;
+      border-top: 1px solid var(--rule);
+    }
+    footer#status .dot { color: var(--accent); }
+    footer#status .item { white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="title">Writing POC · pure WASM</span>
+  <button id="btn-new">New</button>
+  <button id="btn-sample">Reset to sample</button>
+  <button id="btn-open">Open .md</button>
+  <button id="btn-save">Save .md</button>
+  <button id="btn-export">Export .html</button>
+  <button id="btn-reload">Re-render TikZ</button>
+  <span id="tikz-stale" style="display:none;background:#b85c00;color:#fff;padding:0.1rem 0.5rem;border-radius:2px;font-size:0.78rem">TikZ stale — Re-render</span>
+  <span class="filename" id="filename">untitled.md</span>
+</header>
+
+<div id="editor-pane">
+<textarea id="editor" spellcheck="true">---
+title: "Bond pricing — POC"
+date: 2026-04-28
+tags: [proof-of-concept]
+---
+
+This page is rendered entirely in your browser. The prose is parsed by
+markdown-it; inline math like $C_t$, $F$, $y$ uses **KaTeX**; the TikZ figure
+below is compiled by **TikZJax** in WebAssembly and embedded as inline SVG.
+No server is involved.
+
+## Inline + display math
+
+The price of a coupon bond:
+
+$$
+P = \sum_{t=1}^{T} \frac{C_t}{(1+y)^t} + \frac{F}{(1+y)^T}
+$$
+
+Macaulay duration:
+
+$$
+D = \frac{1}{P}\sum_{t=1}^{T} t \cdot \frac{C_t}{(1+y)^t}
+$$
+
+## A TikZ figure
+
+```tex-island
+\begin{tikzpicture}[x=1cm, y=1cm, font=\small]
+  \draw[->, thick] (0,0) -- (7,0) node[right] {maturity};
+  \draw[->, thick] (0,0) -- (0,4) node[above] {yield (\%)};
+  \draw[domain=0.2:6.5, smooth, thick] plot (\x, {1.2 + 1.6*ln(\x+0.5)});
+  \foreach \x/\lab in {1/1y, 2/2y, 5/5y}
+    \draw (\x,0.05) -- (\x,-0.05) node[below] {\lab};
+  \node[anchor=north east] at (6.5, 3.6) {sample curve};
+\end{tikzpicture}
+```
+
+## Why this exists
+
+The point of this proof of concept is to verify that **(a)** TikZJax can
+render real TikZ figures in the browser fast enough to feel live, **(b)** the
+markdown + KaTeX + TikZ-island stack is coherent, and **(c)** the cost of
+going backend-less is acceptable for a working notebook.
+
+Edit the source on the left. Preview updates 200 ms after you stop typing.
+TikZ recompile is ~200 ms warm cache, ~1–2 s cold.</textarea>
+</div>
+
+<div id="preview-pane">
+  <article id="preview">
+    <p style="color:#6b6757;font-style:italic">loading preview…</p>
+  </article>
+</div>
+
+<footer id="status">
+  <span class="item"><span class="dot">●</span> <span id="status-text">ready</span></span>
+  <span class="item"><span id="word-count">0</span> words</span>
+  <span class="item"><span id="island-count">0</span> islands</span>
+  <span class="item">render <span id="render-time">—</span></span>
+</footer>
+
+<script>
+window.addEventListener('error', (e) => {
+  const s = document.getElementById('status-text');
+  if (s) s.textContent = 'error: ' + (e.message || e.error || 'unknown');
+});
+
+(() => {
+  const editor = document.getElementById('editor');
+  const preview = document.getElementById('preview');
+  const wordCount = document.getElementById('word-count');
+  const islandCount = document.getElementById('island-count');
+  const renderTime = document.getElementById('render-time');
+  const statusText = document.getElementById('status-text');
+  const filenameEl = document.getElementById('filename');
+
+  // ---- markdown-it setup (fall back to plain text if it didn't load) ----
+
+  let md = null;
+  function ensureMd() {
+    if (md) return md;
+    if (typeof window.markdownit !== 'function') return null;
+    md = window.markdownit({
+      html: true, linkify: true, typographer: true, breaks: false,
+    });
+    return md;
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // Stash tex-island sources in this map so we can re-create them as real
+  // <script> elements via DOM API after markdown renders. (Scripts inserted
+  // via innerHTML don't reliably trigger TikZJax's MutationObserver.)
+  const islandSources = new Map(); // id -> tikz source
+
+  // Replace ```tex-island fences with placeholder divs BEFORE markdown
+  // parses them, since markdown-it would otherwise wrap them in <pre>.
+  function transformTexIslands(source) {
+    let count = 0;
+    const re = /^```tex-island[^\n]*\n([\s\S]*?)^```[ \t]*$/gm;
+    islandSources.clear();
+    const transformed = source.replace(re, (_, body) => {
+      count += 1;
+      // TikZJax v1 expects \begin{tikzpicture}…\end{tikzpicture}.
+      // If the body is a full standalone document, extract the tikzpicture.
+      let tikz = body.trim();
+      const tpMatch = tikz.match(/\\begin\{tikzpicture\}[\s\S]*?\\end\{tikzpicture\}/);
+      if (tpMatch) tikz = tpMatch[0];
+      const id = 'tex-island-' + count;
+      islandSources.set(id, tikz);
+      return '\n\n<div class="tex-island" id="' + id + '" data-pending="1"></div>\n\n';
+    });
+    return { transformed, count };
+  }
+
+  function injectIslands() {
+    for (const [id, tikz] of islandSources) {
+      const host = document.getElementById(id);
+      if (!host) continue;
+      // Clear any previous render (the SVG TikZJax replaced the script with).
+      host.innerHTML = '';
+      const s = document.createElement('script');
+      s.type = 'text/tikz';
+      s.setAttribute('data-show-console', 'true');
+      s.textContent = tikz;
+      host.appendChild(s);
+      delete host.dataset.pending;
+    }
+  }
+
+  // Track whether the tex-island sources differ from what was rendered at
+  // page load (TikZJax processed those once; re-rendering requires reload).
+  const initialIslandSnapshot = new Map();
+  function snapshotInitialIslands() {
+    const sources = new Map(islandSources);
+    for (const [id, src] of sources) initialIslandSnapshot.set(id, src);
+  }
+  function markIslandsStaleIfChanged(src) {
+    let stale = 0;
+    for (const [id, currentSrc] of islandSources) {
+      const initial = initialIslandSnapshot.get(id);
+      if (initial !== undefined && initial !== currentSrc) stale++;
+    }
+    const banner = document.getElementById('tikz-stale');
+    if (banner) banner.style.display = stale > 0 ? 'inline-block' : 'none';
+  }
+
+  // ---- render pipeline --------------------------------------------------
+
+  let renderTimer = null;
+  function scheduleRender() {
+    if (renderTimer) clearTimeout(renderTimer);
+    renderTimer = setTimeout(render, 180);
+  }
+
+  function render() {
+    const t0 = performance.now();
+    const src = editor.value;
+    const { transformed, count } = transformTexIslands(src);
+
+    // Strip frontmatter for preview (keep it in the source, just hide).
+    let body = transformed.replace(/^---\s*\n[\s\S]*?\n---\s*\n/, '');
+
+    const parser = ensureMd();
+    if (parser) {
+      preview.innerHTML = parser.render(body);
+    } else {
+      // Fallback: very simple line-based render so at least *something* shows.
+      preview.innerHTML = '<pre style="white-space:pre-wrap">' +
+        escapeHtml(body) + '</pre>';
+      statusText.textContent = 'markdown-it not loaded — fallback render';
+    }
+
+    // KaTeX over the preview ($..$ inline, $$..$$ display)
+    if (window.renderMathInElement) {
+      try {
+        window.renderMathInElement(preview, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          throwOnError: false,
+        });
+      } catch (e) { /* swallow */ }
+    }
+
+    // Tex-islands: render statically only on initial page load (TikZJax v1
+    // doesn't reliably re-process dynamically-inserted scripts). Show a
+    // "stale" badge on edits so the user knows to use the [Re-render TikZ]
+    // button (which does a full reload with the current source baked in).
+    injectIslands();
+    markIslandsStaleIfChanged(src);
+
+    const words = (src.match(/\b\w+\b/g) || []).length;
+    wordCount.textContent = words;
+    islandCount.textContent = count;
+    renderTime.textContent = (performance.now() - t0).toFixed(0) + 'ms';
+    if (parser) statusText.textContent = 'rendered';
+  }
+
+  // ---- file I/O ---------------------------------------------------------
+
+  const supportsFsAccess = 'showOpenFilePicker' in window;
+  let currentHandle = null;
+
+  async function openFile() {
+    if (supportsFsAccess) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md', '.markdown'] } }],
+          multiple: false,
+        });
+        const file = await handle.getFile();
+        editor.value = await file.text();
+        filenameEl.textContent = file.name;
+        currentHandle = handle;
+        scheduleRender();
+        statusText.textContent = 'opened ' + file.name;
+      } catch (e) { /* user cancelled */ }
+    } else {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.md,.markdown,text/markdown';
+      input.onchange = async () => {
+        const f = input.files[0];
+        if (!f) return;
+        editor.value = await f.text();
+        filenameEl.textContent = f.name;
+        scheduleRender();
+        statusText.textContent = 'opened ' + f.name + ' (download to save)';
+      };
+      input.click();
+    }
+  }
+
+  async function saveFile() {
+    const text = editor.value;
+    if (supportsFsAccess) {
+      try {
+        if (!currentHandle) {
+          currentHandle = await window.showSaveFilePicker({
+            suggestedName: filenameEl.textContent || 'untitled.md',
+            types: [{ description: 'Markdown', accept: { 'text/markdown': ['.md'] } }],
+          });
+          filenameEl.textContent = currentHandle.name;
+        }
+        const writable = await currentHandle.createWritable();
+        await writable.write(text);
+        await writable.close();
+        statusText.textContent = 'saved ' + currentHandle.name;
+      } catch (e) {
+        statusText.textContent = 'save failed: ' + e.message;
+      }
+    } else {
+      const blob = new Blob([text], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filenameEl.textContent || 'untitled.md';
+      a.click();
+      URL.revokeObjectURL(url);
+      statusText.textContent = 'downloaded ' + a.download;
+    }
+  }
+
+  function exportHtml() {
+    const html = '<!doctype html><meta charset="utf-8"><title>' +
+      escapeHtml(filenameEl.textContent) + '</title>' +
+      '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">' +
+      '<style>body{font-family:Georgia,serif;max-width:720px;margin:2rem auto;padding:0 1rem;line-height:1.55}.tex-island{display:block;margin:1.2rem auto;text-align:center}</style>' +
+      preview.outerHTML.replace('id="preview"', '');
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (filenameEl.textContent || 'untitled.md').replace(/\.md$/, '') + '.html';
+    a.click();
+    URL.revokeObjectURL(url);
+    statusText.textContent = 'exported ' + a.download;
+  }
+
+  // ---- localStorage draft (does NOT override the textarea on first load) -
+
+  const STORAGE_KEY = 'writing-poc:draft';
+  const SAMPLE_INITIAL = editor.value;
+
+  function saveDraft() {
+    try { localStorage.setItem(STORAGE_KEY, editor.value); } catch {}
+  }
+  function loadDraft() {
+    try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+  }
+
+  // ---- events -----------------------------------------------------------
+
+  editor.addEventListener('input', () => {
+    scheduleRender();
+    saveDraft();
+  });
+
+  document.getElementById('btn-new').onclick = () => {
+    if (editor.value && !confirm('Discard current document?')) return;
+    editor.value = '';
+    filenameEl.textContent = 'untitled.md';
+    currentHandle = null;
+    saveDraft();
+    scheduleRender();
+  };
+  document.getElementById('btn-sample').onclick = () => {
+    editor.value = SAMPLE_INITIAL;
+    filenameEl.textContent = 'sample.md';
+    currentHandle = null;
+    saveDraft();
+    scheduleRender();
+  };
+  document.getElementById('btn-open').onclick = openFile;
+  document.getElementById('btn-save').onclick = saveFile;
+  document.getElementById('btn-export').onclick = exportHtml;
+  // Re-render TikZ = full reload. TikZJax processes islands on its initial
+  // scan; the only reliable way to render edited TikZ is to reload the page
+  // with the new source already in the textarea (localStorage carries state).
+  document.getElementById('btn-reload').onclick = () => {
+    saveDraft();
+    location.reload();
+  };
+
+  // ---- bootstrap --------------------------------------------------------
+  // Prefer a saved draft if it exists AND has content; otherwise keep the
+  // sample text that's already in the textarea HTML.
+  const draft = loadDraft();
+  if (draft && draft.trim().length > 0) {
+    editor.value = draft;
+    filenameEl.textContent = 'draft (auto-saved)';
+  }
+
+  // First render: insert islands + snapshot so we can detect later edits.
+  // We render synchronously (no debounce) so the initial DOMContentLoaded
+  // sees the tikz script tags and TikZJax processes them on its first scan.
+  // KaTeX (loaded as defer) won't be ready at parse-time — re-apply on DCL.
+  render();
+  snapshotInitialIslands();
+
+  function applyKaTeX() {
+    if (window.renderMathInElement) {
+      try {
+        window.renderMathInElement(preview, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+          ],
+          throwOnError: false,
+        });
+      } catch (e) { /* swallow */ }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyKaTeX);
+  } else {
+    applyKaTeX();
+  }
+  // KaTeX defer script may finish loading after DOMContentLoaded in some
+  // browsers; window.load is the safest "everything is ready" signal.
+  window.addEventListener('load', applyKaTeX);
+})();
+</script>
+
+</body>
+</html>

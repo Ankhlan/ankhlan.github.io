@@ -33,3 +33,15 @@ venv/
 # Local scratch (locked on Windows; ignore until manual cleanup)
 _proof/
 __dead_proof/
+
+# relay.py state
+.relay.*
+
+# Relay-bootstrapped local config (machine-specific absolute paths)
+.mcp.json
+.claude/
+
+# WASM POC verification artifacts (binary screenshots from Playwright)
+wasm-poc/_verify.png
+wasm-poc/_minimal_verify.png
+wasm-poc/_dcl_dispatch.png
