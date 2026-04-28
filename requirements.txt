@@ -1,3 +1,9 @@
 # Python dependencies for analysis scripts
 pandas>=2.0
 matplotlib>=3.7
+
+# Build pipeline (markdown → HTML with TeX islands)
+pyyaml>=6.0
+jinja2>=3.1
+markdown-it-py>=3.0
+livereload>=2.6

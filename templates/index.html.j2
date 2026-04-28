@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Ankhlan</title>
-  <meta name="description" content="A working notebook on money, systems, and the writing surface that publishes them.">
+  <title>{{ site_title }}</title>
+  <meta name="description" content="{{ site_subtitle }}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,8 +25,8 @@
 
     <header class="site-header">
       <div class="site-title-block">
-        <a href="/" class="site-title">Ankhlan</a>
-        <div class="site-subtitle">A working notebook on money, systems, and the writing surface that publishes them.</div>
+        <a href="/" class="site-title">{{ site_title }}</a>
+        <div class="site-subtitle">{{ site_subtitle }}</div>
       </div>
       <nav class="site-nav" aria-label="Main navigation">
         <a href="/">Home</a>
@@ -51,11 +51,16 @@
 
         <h2 style="margin-top:2.4rem;">Posts</h2>
         <ul class="post-list">
+          {% for p in posts %}
           <li>
-            <div class="post-title"><a href="/posts/2026-04-27-tex-islands-poc/">TeX islands in HTML — proof of concept</a></div>
+            <div class="post-title"><a href="/posts/{{ p.slug }}/">{{ p.title }}</a></div>
             <div class="post-meta">
-<time datetime="2026-04-27">2026-04-27</time>· <span class="tag">meta</span> · <span class="tag">infrastructure</span>            </div>
-<div class="post-summary">First post in the new pipeline. Prose flows in HTML; equations and TikZ figures render as TeX-quality SVG islands.</div>          </li>
+              {% if p.date %}<time datetime="{{ p.date }}">{{ p.date }}</time>{% endif %}
+              {% if p.tags %}· {% for t in p.tags %}<span class="tag">{{ t }}</span>{% if not loop.last %} · {% endif %}{% endfor %}{% endif %}
+            </div>
+            {% if p.summary %}<div class="post-summary">{{ p.summary }}</div>{% endif %}
+          </li>
+          {% endfor %}
         </ul>
       </article>
     </main>

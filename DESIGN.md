@@ -1,354 +1,86 @@
-# Notebook — Site Design
+# Design
 
-## Identity
+## What this site is
 
-A working notebook for a **monetary economist, trader, and central banker**.
+A working notebook on monetary economics, and simultaneously the proof of
+concept for the writing system that publishes it.
 
-The site publishes:
-- Short notes and longer essays on money, reserves, yields, FX, and financial plumbing.
-- Data-driven charts and tables (generated from Python scripts).
-- Project threads that tie related notes together.
+## What problem the system solves
 
-Tone: precise, skeptical, first-principles. Not a blog — a notebook of working ideas, some polished, some rough.
+Markdown is convenient. TeX is beautiful. Browsers render markdown but
+not TeX. Every prior attempt to bridge them — Pandoc HTML, MathJax,
+`tex4ht`, LaTeXML — has had to choose between TeX-quality layout (giving
+up reflow and accessibility) and reflowable HTML (giving up TeX-quality
+layout). Writers who care about typography end up publishing PDFs.
 
----
+This system makes the choice locally instead of globally. Prose lives in
+HTML and gets web-native treatment: reflow, search, accessibility, mobile.
+Mathematics and figures live in TeX and get TeX-native treatment: real
+glyph positioning, microtype, TikZ. The seam between them is an
+`<object>` tag — small, honest, and entirely under the author's control.
 
-## Sections
-
-| Page | Purpose |
-|------|---------|
-| **Home** | Latest posts + archive; one-liner intro. |
-| **Topics** | Tag-based index: *Reserves & Gold*, *Yield Curves*, *FX & Flows*, *Monetary Systems*, *Market Structure*, *Central Banking*. |
-| **Projects** | Multi-post threads: *Gold Notebook*, *Yield Curve Monitor*, *ECLIS Notes*, etc. |
-| **Data** | (future) Interactive dashboards or downloadable datasets. |
-| **About** | Short bio, contact, disclaimers. |
-
----
-
-## Visual Design
-
-- **Layout:** Tufte-inspired — narrow text column (~600px), wide right margin for sidenotes.
-- **Typography:** Serif body (Noto Serif), sans-serif UI/meta (Noto Sans). Headings currently inherit the serif body font.
-- **Color:** Near-black text on off-white; muted accent for links; no heavy colors.
-- **Charts:** Clean, minimal — matplotlib with seaborn whitegrid or custom style; consistent sizing.
-
-### Fonts (what you use today)
-
-Fonts are loaded from Google Fonts in pages like [index.html](index.html) and [templates/post.html](templates/post.html):
-
-- **Noto Serif** (Latin) — body text, headings (via inheritance), site title
-- **Noto Serif JP** — Japanese serif fallback when the page `lang="ja"` and glyphs require it
-- **Noto Sans** (Latin) — navigation, metadata, sidenotes/margin notes, captions, tags
-- **Noto Sans JP** — Japanese sans fallback for UI/meta/captions when `lang="ja"`
-
-In CSS, the main assignments live in [assets/css/tufte.css](assets/css/tufte.css):
-
-- `body { font-family: "Noto Serif", ... }` → default reading font
-- `.site-nav`, `.meta`, `.site-subtitle`, `.tag`, sidenotes/figcaptions → use Noto Sans stacks
-- `code { font-family: "Source Code Pro", ui-monospace, ... }` → *uses Source Code Pro only if installed locally* (it is not currently loaded from Google Fonts)
-
-### Font options (simple choices)
-
-You basically have three stable options:
-
-1) **Current (recommended for multilingual):** Noto Serif body + Noto Sans UI/meta.
-2) **More “editorial”:** keep body serif, switch only `h1/h2/h3` to Noto Sans (we tested this as “Option C”; easy to re-enable later).
-3) **All-serif:** use Noto Serif everywhere (nav/meta included). Very bookish; less “instrument panel”.
-
----
-
-## Design Standards (so new posts are easy)
-
-The goal is that when you add a post, you only touch:
-
-- `posts/YYYY-MM-DD-slug/` (your text, data, scripts, figures)
-- (optional) a generator step that refreshes index pages
-
-### Writing standard
-
-- **Title case:** sentence case or headline case, but be consistent per post.
-- **Open with one clear paragraph** stating: what it is + why it matters.
-- **Use `##` sections** for structure. Avoid deep nesting unless needed.
-- **Keep emphasis sparse:** bold for key terms; italics mostly for quotations/citations.
-
-### Figures & captions standard
-
-Use one of three figure placements:
-
-- **Main column**: normal Markdown image or `<figure>` (primary charts)
-- **Margin figure**: `<figure class="margin-figure">` (supporting chart)
-- **Full-width**: `<figure class="fullwidth-figure">` (multi-panel / dense)
-
-Caption convention (works well over time):
-
-`Title. Source: _____. Notes: _____.`
-
-Example (already used in the generated HTML):
-
-`FX Reserves (ex gold), Selected Countries. Source: IMF IFS.`
-
-### Chart standard (matplotlib)
-
-- **Figure sizes** (pick one per plot):
-  - Margin: `figsize=(4, 3)`
-  - Main: `figsize=(7, 4)`
-  - Full-width: `figsize=(10, 4)`
-- **Titles:** short; include unit context in axis label (not the title).
-- **Axes:** hide top/right spines; light grid (`alpha≈0.3`).
-- **Legend:** only if you truly need it; keep small.
-- **Colors:** prefer one highlight series + grays for the rest (your code already does this in places).
-
-### Tables standard
-
-- Keep tables small: prefer 3–5 columns.
-- Right-align numeric columns in Markdown when possible.
-- Always include units in the column header (`USD bn`, `%`, `bp`).
-- If a table is large, convert it to a figure (or split into multiple tables).
-
-## Content Workflow
+## Architecture
 
 ```
-posts/<slug>/
-├── index.md          # Article (Markdown + YAML frontmatter)
-├── data/             # Article-specific datasets
-│   └── *.csv
-├── scripts/          # Article-specific analysis
-│   └── *.py
-├── figures/          # Generated images (PNG/SVG)
-│   └── *.png
-└── README.md         # Optional: notes on regenerating
+posts/<slug>/post.md
+   │
+   ├── YAML frontmatter ────────────► metadata (title/date/tags/summary)
+   ├── Markdown prose
+   │     │
+   │     ├── inline $math$        ──► KaTeX (browser, read-time)
+   │     ├── display $$math$$     ──► KaTeX (browser, read-time)
+   │     └── ```tex-island fences ──► latex → dvisvgm → SVG (build-time, cached)
+   │                                       │
+   │                                       └── <object data="...svg">
+   │                                                  │
+   ▼                                                  ▼
+markdown-it-py + Jinja2 template ◄──────────── substituted markdown
+   │
+   ▼
+posts/<slug>/index.html
 ```
 
-**Shared resources** (cross-article datasets, reusable code):
-- `data/raw/`         — Original downloads (immutable)
-- `data/processed/`   — Cleaned datasets used by multiple articles
-- `analysis/`         — Shared Python utilities
-- `assets/figures/`   — Site-wide images (logo, etc.)
+### Design decisions
 
-**Build flow:**
-```
-┌─────────────────────┐
-│ posts/<slug>/data/  │
-└─────────┬───────────┘
-          │
-          ▼
-┌─────────────────────┐      ┌─────────────────────┐
-│ posts/<slug>/scripts│ ───► │ posts/<slug>/figures│
-└─────────────────────┘      └─────────────────────┘
-          │
-          ▼
-┌─────────────────────┐      ┌─────────────────────┐
-│ posts/<slug>/index.md│───► │ posts/<slug>/index.html│
-└─────────────────────┘      └─────────────────────┘
-          (pandoc)
-```
+1. **Single-source authoring.** The whole post lives in one markdown file.
+   TeX islands are inline fenced blocks, not separate `.tex` files.
+   Editing a figure means editing the markdown.
 
-- **Write** article in `posts/<slug>/index.md`
-- **Add data** to `posts/<slug>/data/`
-- **Add scripts** to `posts/<slug>/scripts/`
-- **Run** `tools/build.ps1` to regenerate all articles
-- **Commit** and push; GitHub Pages serves static HTML
+2. **Hybrid layout, not pure TeX-on-web.** Pure TeX-as-body (DVI → SVG for
+   the entire post) was tested and rejected: the gains in prose typography
+   are real but small, the losses in accessibility, search, and mobile
+   reflow are substantial. The hybrid concentrates TeX where it earns its
+   keep — math and figures — and lets HTML do prose.
 
-Note: [tools/generate_index.py](tools/generate_index.py) currently prints a post index but does not rewrite `index.html` / `topics.html` yet. If you want “add a post → run build → done”, the next step is to extend it to regenerate those index pages from frontmatter.
+3. **Content-addressed island cache.** Each TeX island's SVG is named by
+   the SHA-256 of its source. Edit prose without recompiling islands; edit
+   one island and only that one rebuilds. The cache lives at
+   `posts/<slug>/tex/build/` and is gitignored.
 
----
+4. **DVI is an intermediate, not canonical.** TeX source is the source of
+   truth. DVI files are deterministic and ephemeral.
 
-## Topic Tags
+5. **Static output, no runtime.** The site is plain HTML, CSS, and a small
+   amount of vendored JS (KaTeX, font controls). It is served by GitHub
+   Pages. There is no analytics, no comment system, no client-side
+   framework.
 
-Core tags (expand as needed):
+6. **The tool is unusual; the authorship is conventional.** The pipeline
+   may be terminal-driven and AI-assisted at the editing surface. The
+   published artifact is the author's. There is no AI byline, no
+   conversation log in the margin, no co-authorship. The instrument is
+   not a participant in the document.
 
-- `reserves` — central bank reserves, gold, FX holdings
-- `gold` — gold market, revaluation, flows
-- `yield-curve` — term structure, inversion, carry
-- `fx` — exchange rates, flows, intervention
-- `monetary-system` — plumbing, correspondent banking, settlements
-- `market-structure` — liquidity, microstructure, order flow
-- `central-banking` — policy, balance sheets, operations
-- `macro` — broad macro takes
-- `data` — dataset releases, sourcing notes
+## Roadmap
 
----
+- File watcher with live-reload (the Zathura analog for the browser tab).
+- Index generation enhancements: tags, archive, RSS.
+- Optional second narrow geometry for mobile-readable TeX islands.
 
-## Future Enhancements
+## Non-goals
 
-- [ ] RSS feed (auto-generated)
-- [ ] Client-side search (FlexSearch)
-- [ ] Dark mode (`prefers-color-scheme`)
-- [ ] Interactive charts (Plotly or Observable embeds)
-- [ ] PDF export for selected essays (pandoc → LaTeX)
-
----
-
-## Writing Tufte-Style Articles
-
-Tufte's philosophy: **the reader's eye should flow down the main argument** while supporting material (notes, small figures, commentary) lives in the margin. This creates a layered reading experience.
-
-### Markdown vs HTML
-
-**Standard Markdown `![]()`** produces a plain `<figure>` in HTML — this stays in the main column. For margin placement, you have two options:
-
-1. **Write HTML directly in Markdown** (works with most processors):
-   ```markdown
-   Here is the main text.
-   
-   <figure class="margin-figure">
-     <img src="figures/chart.png" alt="...">
-     <figcaption>Caption</figcaption>
-   </figure>
-   
-   The text continues flowing here.
-   ```
-
-2. **Use Pandoc attributes** (if using pandoc with `+fenced_divs`):
-   ```markdown
-   ::: {.margin-figure}
-   ![Caption](figures/chart.png)
-   :::
-   ```
-
-3. **Post-process**: Write plain markdown, then the build script converts images matching a pattern (e.g., `*-margin.png`) to margin figures.
-
-**Recommendation**: For maximum control, write HTML for margin figures directly in your `.md` file. Markdown parsers pass through HTML unchanged.
-
-### Figure Types
-
-| Type | HTML Class | When to Use |
-|------|-----------|-------------|
-| **Margin Figure** | `margin-figure` | Small charts, supporting visuals, thumbnails |
-| **Main Column** | `<figure>` (default) | Primary charts that drive the argument |
-| **Full-width** | `fullwidth-figure` | Complex visualizations, multi-panel charts |
-
-### HTML Patterns
-
-**Margin figure** (floats right, ~270px wide):
-```html
-<figure class="margin-figure">
-  <img src="figures/small-chart.png" alt="Description">
-  <figcaption>Caption in margin</figcaption>
-</figure>
-```
-
-**Sidenote** (numbered, appears in margin):
-```html
-<p>Main text continues here.<span class="sidenote-number"></span></p>
-<span class="sidenote">This appears in the margin with a superscript number.</span>
-```
-
-**Margin note** (unnumbered, appears in margin):
-```html
-<span class="marginnote">Commentary without a number.</span>
-```
-
-**Full-width figure** (spans text + margin):
-```html
-<figure class="fullwidth-figure">
-  <img src="figures/wide-chart.png" alt="Description">
-  <figcaption>Caption below wide figure</figcaption>
-</figure>
-```
-
-### Python Script Guidelines
-
-Generate figures at appropriate sizes for each use case:
-
-```python
-import matplotlib.pyplot as plt
-
-# For margin figures: narrow, compact (~270px displayed)
-fig, ax = plt.subplots(figsize=(4, 3), dpi=150)
-# ... plot ...
-fig.savefig('figures/margin-chart.png', bbox_inches='tight', facecolor='white')
-
-# For main column: medium width (~570px)
-fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
-# ... plot ...
-fig.savefig('figures/main-chart.png', bbox_inches='tight', facecolor='white')
-
-# For full-width: wide format (~880px)
-fig, ax = plt.subplots(figsize=(10, 4), dpi=150)
-# ... plot ...
-fig.savefig('figures/fullwidth-chart.png', bbox_inches='tight', facecolor='white')
-```
-
-**Style settings for Tufte aesthetics:**
-```python
-plt.rcParams.update({
-    'font.family': 'serif',
-    'font.size': 10,
-    'axes.spines.top': False,
-    'axes.spines.right': False,
-    'axes.linewidth': 0.5,
-    'axes.labelsize': 9,
-    'xtick.labelsize': 8,
-    'ytick.labelsize': 8,
-    'legend.fontsize': 8,
-    'figure.facecolor': 'white',
-    'axes.facecolor': 'white',
-    'axes.grid': True,
-    'grid.alpha': 0.3,
-    'grid.linewidth': 0.5,
-})
-```
-
-### Article Structure Example
-
-```markdown
----
-title: "Gold Holdings Analysis"
-date: 2026-01-15
-tags: [gold, reserves]
----
-
-# Gold Holdings Analysis
-
-The main argument starts here, flowing down the narrow column.
-
-<figure class="margin-figure">
-  <img src="figures/gold-trend.png" alt="Gold trend">
-  <figcaption>20-year trend</figcaption>
-</figure>
-
-Central banks hold approximately 36,000 tonnes of gold.<span class="sidenote-number"></span>
-<span class="sidenote">Source: World Gold Council, Q3 2025 data.</span>
-
-## Key Findings
-
-The primary visualization drives the main point:
-
-<figure>
-  <img src="figures/gold-holdings-by-country.png" alt="Holdings by country">
-  <figcaption>Top 10 holders account for 70% of official gold.</figcaption>
-</figure>
-
-<span class="marginnote">Russia and China have been the largest buyers since 2010.</span>
-
-For complex multi-panel analysis, use full-width:
-
-<figure class="fullwidth-figure">
-  <img src="figures/gold-decomposition.png" alt="Decomposition">
-  <figcaption>Left: Buyers. Center: Sellers. Right: Net flow by year.</figcaption>
-</figure>
-```
-
-### Responsive Behavior
-
-- **Wide screens (1100px+):** Margins appear on the right; margin figures float beside text
-- **Narrow screens:** Margins collapse inline; figures stack vertically with subtle left border
-
----
-
-## File Naming Convention
-
-Articles: `posts/YYYY-MM-DD-slug/` folder containing:
-- `index.md` — article content
-- `data/` — article-specific data
-- `scripts/` — article-specific analysis
-- `figures/` — generated outputs
-
-Shared scripts: `analysis/<topic>_<description>.py`
-
-Shared data: `data/raw/` (immutable), `data/processed/` (derived)
-
----
-
-*Last updated: 2026-01-07*
+- Reimplementing TeX, DVI, dvisvgm, KaTeX, or the markdown parser.
+- A static site generator framework. The pipeline is ~300 lines of Python
+  and is meant to stay that way.
+- Co-authorship surfaces, AI annotations, or anything that puts the tool
+  into the published artifact.

@@ -20,3 +20,16 @@ venv/
 # Temp / build artifacts
 *.tmp
 *.bak
+
+# TeX intermediates (regenerated deterministically from .md sources)
+*.aux
+*.log
+*.dvi
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+**/tex/build/
+
+# Local scratch (locked on Windows; ignore until manual cleanup)
+_proof/
+__dead_proof/
