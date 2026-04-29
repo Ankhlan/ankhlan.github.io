@@ -271,7 +271,31 @@
   <button id="btn-save" hidden>Save</button>
   <button id="btn-download" class="ghost" hidden>Download</button>
   <button id="btn-publish" hidden title="Build, commit, and push to GitHub Pages">Publish</button>
+  <button id="btn-auth" class="ghost" title="Connect to GitHub">Sign in</button>
 </header>
+
+<dialog id="auth-dialog">
+  <div class="dialog-body">
+    <h2>Connect to GitHub</h2>
+    <p class="hint">Generate a fine-grained personal access token, paste it below, and the desk can save edits directly to <code>Ankhlan/ankhlan.github.io</code> from any browser.</p>
+    <ol class="hint" style="padding-left: 1.1rem;">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a>.</li>
+      <li>Resource owner: <strong>Ankhlan</strong>. Repository access: <strong>Only select repositories → ankhlan.github.io</strong>.</li>
+      <li>Permissions: <strong>Contents → Read and write</strong>. Everything else read-only or off.</li>
+      <li>Set an expiration that suits you. Generate, copy the token, paste below.</li>
+    </ol>
+    <label class="dialog-field">
+      <span>Personal access token</span>
+      <input id="auth-token" type="password" placeholder="github_pat_…" autocomplete="off">
+    </label>
+    <p class="hint" style="font-size: 0.78rem;">Stored only in this browser's localStorage. Never sent anywhere except <code>api.github.com</code>.</p>
+    <div class="dialog-output" id="auth-output" hidden></div>
+    <div class="dialog-actions">
+      <button class="ghost" id="auth-cancel">Cancel</button>
+      <button id="auth-go">Connect</button>
+    </div>
+  </div>
+</dialog>
 
 <dialog id="publish-dialog">
   <div class="dialog-body">
@@ -331,6 +355,12 @@
   const btnNew = document.getElementById('btn-new-post');
   const btnOpenHome = document.getElementById('btn-open-home');
   const btnPublish = document.getElementById('btn-publish');
+  const btnAuth = document.getElementById('btn-auth');
+  const dlgAuth = document.getElementById('auth-dialog');
+  const inpAuthToken = document.getElementById('auth-token');
+  const outAuth = document.getElementById('auth-output');
+  const btnAuthGo = document.getElementById('auth-go');
+  const btnAuthCancel = document.getElementById('auth-cancel');
   const postList = document.getElementById('post-list');
   const viewEditor = document.getElementById('view-editor');
   const dlgPublish = document.getElementById('publish-dialog');
@@ -340,6 +370,82 @@
   const btnPublishCancel = document.getElementById('publish-cancel');
 
   const md = window.markdownit ? window.markdownit({ html: true, linkify: true, typographer: true }) : null;
+
+  // ---- GitHub auth (BYO PAT) -------------------------------------------
+  // Stored in localStorage; used as Bearer token against api.github.com.
+  // Repo is hard-coded for now since this desk is for one site.
+
+  const REPO_OWNER = 'Ankhlan';
+  const REPO_NAME = 'ankhlan.github.io';
+  const REPO_BRANCH = 'main';
+  const AUTH_KEY = 'desk:gh-token';
+  const AUTH_USER_KEY = 'desk:gh-user';
+
+  function getToken() { return localStorage.getItem(AUTH_KEY) || null; }
+  function setToken(t) { localStorage.setItem(AUTH_KEY, t); }
+  function clearToken() { localStorage.removeItem(AUTH_KEY); localStorage.removeItem(AUTH_USER_KEY); }
+  function getUser() { return localStorage.getItem(AUTH_USER_KEY) || null; }
+  function setUser(u) { localStorage.setItem(AUTH_USER_KEY, u); }
+
+  async function ghFetch(path, opts = {}) {
+    const token = getToken();
+    if (!token) throw new Error('not connected to GitHub — click Sign in');
+    const res = await fetch('https://api.github.com' + path, {
+      ...opts,
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': 'Bearer ' + token,
+        'X-GitHub-Api-Version': '2022-11-28',
+        ...(opts.headers || {}),
+      },
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      throw new Error(`GitHub API ${res.status}: ${body.slice(0, 300)}`);
+    }
+    return res.json();
+  }
+
+  async function ghCheckAuth() {
+    const me = await ghFetch('/user');
+    setUser(me.login);
+    return me;
+  }
+
+  async function ghLoadFile(path) {
+    const data = await ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodeURI(path)}?ref=${REPO_BRANCH}`);
+    const content = atob(data.content.replace(/\n/g, ''));
+    // Decode UTF-8 from base64 (atob returns raw bytes)
+    const decoded = decodeURIComponent(escape(content));
+    return { content: decoded, sha: data.sha };
+  }
+
+  async function ghSaveFile(path, content, sha, message) {
+    const utf8 = unescape(encodeURIComponent(content));
+    const b64 = btoa(utf8);
+    return ghFetch(`/repos/${REPO_OWNER}/${REPO_NAME}/contents/${encodeURI(path)}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: message || 'Update via desk',
+        content: b64,
+        sha: sha || undefined,
+        branch: REPO_BRANCH,
+      }),
+    });
+  }
+
+  function refreshAuthUI() {
+    const u = getUser();
+    if (u) {
+      btnAuth.textContent = '@' + u + ' · sign out';
+      btnAuth.title = 'Sign out';
+    } else {
+      btnAuth.textContent = 'Sign in';
+      btnAuth.title = 'Connect to GitHub';
+    }
+  }
+
 
   // ---- routing ---------------------------------------------------------
 
@@ -416,6 +522,7 @@
   let currentHandle = null;
   let currentPath = null;
   let lastSavedText = '';
+  let lastSha = null;       // GitHub blob sha for the loaded file
   let dirty = false;
   let autosaveTimer = null;
   const supportsFs = 'showOpenFilePicker' in window;
@@ -424,13 +531,35 @@
     setView('editor');
     crumb.innerHTML = '<a href="?" data-link>posts</a> ▸ <span style="color:var(--ink)">' + escapeHtml(path) + '</span>';
     setStatus('loading…');
-    btnSave.hidden = !supportsFs;
-    btnDownload.hidden = supportsFs;
     btnOpen.hidden = false;
     btnPublish.hidden = false;
     currentPath = path;
     currentHandle = null;
+    lastSha = null;
     hideBanner();
+
+    // Prefer GitHub API when authenticated — works from anywhere, gets the
+    // SHA we need to commit changes back. Otherwise fall back to fetching
+    // from the same origin.
+    if (getToken()) {
+      try {
+        const { content, sha } = await ghLoadFile(path);
+        editor.value = content;
+        lastSavedText = content;
+        lastSha = sha;
+        dirty = false;
+        render();
+        btnSave.hidden = false;
+        btnDownload.hidden = true;
+        setStatus('loaded via GitHub · save to commit');
+        return;
+      } catch (e) {
+        // Fall through to origin fetch.
+      }
+    }
+
+    btnSave.hidden = !supportsFs;
+    btnDownload.hidden = supportsFs;
 
     try {
       const res = await fetch('/' + path, { cache: 'no-cache' });
@@ -440,7 +569,7 @@
       lastSavedText = text;
       dirty = false;
       render();
-      setStatus(supportsFs ? 'loaded · click [Open .md] for writable' : 'loaded · download to save');
+      setStatus(supportsFs ? 'loaded · click [Open .md] for writable' : 'loaded · sign in to commit, or download');
     } catch (e) {
       editor.value = '';
       preview.innerHTML = '<p class="placeholder">could not load ' + escapeHtml(path) + ': ' + escapeHtml(e.message) + '</p>';
@@ -494,6 +623,9 @@
     dirty = (editor.value !== lastSavedText);
     setStatus(dirty ? '● modified' : '✓ saved', dirty ? 'dirty' : '');
     scheduleRender();
+    // Aggressive autosave only when we have a writable LOCAL handle —
+    // every keystroke would otherwise trigger a GitHub commit, which is
+    // both slow and noisy. Auto-commit is opt-in per Save click.
     if (currentHandle) {
       clearTimeout(autosaveTimer);
       autosaveTimer = setTimeout(() => saveToHandle(), 200);
@@ -555,6 +687,37 @@
     }
   }
 
+  async function saveToGitHub() {
+    if (!currentPath) return;
+    if (!getToken()) {
+      setStatus('not signed in', 'warn');
+      return;
+    }
+    setStatus('committing…');
+    try {
+      const msg = `Update ${currentPath}`;
+      const res = await ghSaveFile(currentPath, editor.value, lastSha, msg);
+      lastSavedText = editor.value;
+      lastSha = res.content && res.content.sha ? res.content.sha : lastSha;
+      dirty = false;
+      setStatus('✓ committed · live in 30–90s');
+    } catch (e) {
+      setStatus('commit failed: ' + e.message.slice(0, 80), 'warn');
+    }
+  }
+
+  // Smart save: commits to GitHub if authed, writes to local file if a handle
+  // is set, downloads otherwise.
+  async function smartSave() {
+    if (currentHandle) {
+      await saveToHandle();
+    } else if (getToken() && currentPath) {
+      await saveToGitHub();
+    } else {
+      downloadFile();
+    }
+  }
+
   function downloadFile() {
     const blob = new Blob([editor.value], { type: 'text/markdown' });
     const url = URL.createObjectURL(blob);
@@ -568,7 +731,7 @@
 
   btnOpen.onclick = openLocal;
   btnOpenHome.onclick = openLocal;
-  btnSave.onclick = saveToHandle;
+  btnSave.onclick = smartSave;
   btnDownload.onclick = downloadFile;
 
   // ---- publish ---------------------------------------------------------
@@ -606,7 +769,7 @@
   btnPublishCancel.onclick = () => dlgPublish.close();
 
   async function doPublish() {
-    // Save first if a handle is set so we don't push a stale draft.
+    // Save first if a local handle is set so we don't push a stale draft.
     if (currentHandle && (editor.value !== lastSavedText)) {
       await saveToHandle();
     }
@@ -615,7 +778,10 @@
     btnPublishGo.textContent = 'publishing…';
     outPublish.hidden = false;
     outPublish.className = 'dialog-output';
-    outPublish.textContent = 'connecting to watcher api at ' + apiBaseUrl() + '…';
+    outPublish.textContent = 'trying local watcher at ' + apiBaseUrl() + '…';
+
+    // Try local watcher first (full build + commit + push). Falls back to
+    // GitHub API direct-commit of the current file when watcher is offline.
     try {
       const res = await fetch(apiBaseUrl() + '/api/publish', {
         method: 'POST',
@@ -633,15 +799,44 @@
       } else {
         setStatus('publish failed', 'warn');
       }
+      return;
     } catch (e) {
-      outPublish.textContent = 'could not reach watcher api at ' + apiBaseUrl() + '\n\n'
-        + e.message + '\n\n'
-        + 'is the watcher running? `python tools/watch.py` from the repo.';
-      outPublish.className = 'dialog-output err';
-      btnPublishGo.textContent = 'Failed';
-      btnPublishCancel.disabled = false;
-      setStatus('watcher api unreachable', 'warn');
+      // Watcher unreachable. Try GitHub API path if authed and we have a path.
     }
+
+    if (getToken() && currentPath) {
+      outPublish.textContent = 'watcher offline — committing current file via GitHub API…';
+      try {
+        const msg = inpPublishMsg.value || `Update ${currentPath}`;
+        await ghSaveFile(currentPath, editor.value, lastSha, msg);
+        lastSavedText = editor.value;
+        dirty = false;
+        outPublish.textContent =
+          'committed ' + currentPath + ' to ' + REPO_OWNER + '/' + REPO_NAME + '\n\n'
+          + 'GitHub Action will build and deploy in ~30–120s.\n'
+          + 'Watch: https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/actions';
+        outPublish.className = 'dialog-output ok';
+        btnPublishGo.textContent = 'Done';
+        btnPublishCancel.disabled = false;
+        setStatus('✓ committed · Action building');
+      } catch (e) {
+        outPublish.textContent = 'GitHub API commit failed:\n\n' + e.message;
+        outPublish.className = 'dialog-output err';
+        btnPublishGo.textContent = 'Failed';
+        btnPublishCancel.disabled = false;
+        setStatus('commit failed', 'warn');
+      }
+      return;
+    }
+
+    outPublish.textContent =
+      'no publish path available.\n\n'
+      + '• run `python tools/watch.py` locally so the desk can call the publish api, or\n'
+      + '• click [Sign in] to connect a GitHub PAT and commit directly via the api.';
+    outPublish.className = 'dialog-output err';
+    btnPublishGo.textContent = 'Failed';
+    btnPublishCancel.disabled = false;
+    setStatus('no publish target', 'warn');
   }
 
   btnPublishGo.onclick = () => {
@@ -651,6 +846,73 @@
     }
     doPublish();
   };
+
+  // ---- auth dialog -----------------------------------------------------
+
+  btnAuth.onclick = () => {
+    if (getToken()) {
+      // already signed in — confirm sign out
+      if (confirm('Sign out and clear the GitHub token from this browser?')) {
+        clearToken();
+        refreshAuthUI();
+        setStatus('signed out');
+      }
+      return;
+    }
+    inpAuthToken.value = '';
+    outAuth.hidden = true;
+    outAuth.textContent = '';
+    outAuth.className = 'dialog-output';
+    btnAuthGo.disabled = false;
+    btnAuthCancel.disabled = false;
+    btnAuthGo.textContent = 'Connect';
+    if (typeof dlgAuth.showModal === 'function') {
+      dlgAuth.showModal();
+    } else {
+      dlgAuth.setAttribute('open', '');
+    }
+    setTimeout(() => inpAuthToken.focus(), 50);
+  };
+
+  btnAuthCancel.onclick = () => dlgAuth.close();
+
+  btnAuthGo.onclick = async () => {
+    if (btnAuthGo.textContent === 'Done') {
+      dlgAuth.close();
+      return;
+    }
+    const token = inpAuthToken.value.trim();
+    if (!token) {
+      outAuth.hidden = false;
+      outAuth.textContent = 'paste a token first';
+      outAuth.className = 'dialog-output err';
+      return;
+    }
+    btnAuthGo.disabled = true;
+    btnAuthCancel.disabled = true;
+    btnAuthGo.textContent = 'verifying…';
+    outAuth.hidden = false;
+    outAuth.textContent = 'checking token against api.github.com…';
+    outAuth.className = 'dialog-output';
+    setToken(token);
+    try {
+      const me = await ghCheckAuth();
+      outAuth.textContent = 'connected as @' + me.login + '\nverified scope by listing your account.';
+      outAuth.className = 'dialog-output ok';
+      btnAuthGo.textContent = 'Done';
+      btnAuthCancel.disabled = false;
+      refreshAuthUI();
+    } catch (e) {
+      clearToken();
+      outAuth.textContent = 'connection failed:\n\n' + e.message + '\n\nverify the token has Contents: read+write on Ankhlan/ankhlan.github.io.';
+      outAuth.className = 'dialog-output err';
+      btnAuthGo.textContent = 'Retry';
+      btnAuthGo.disabled = false;
+      btnAuthCancel.disabled = false;
+    }
+  };
+
+  refreshAuthUI();
 
   btnNew.onclick = () => {
     const slug = prompt('Slug for the new post (e.g., yields-curve):');
