@@ -42,6 +42,4 @@ __dead_proof/
 .claude/
 
 # WASM POC verification artifacts (binary screenshots from Playwright)
-wasm-poc/_verify.png
-wasm-poc/_minimal_verify.png
-wasm-poc/_dcl_dispatch.png
+desk/_*.png

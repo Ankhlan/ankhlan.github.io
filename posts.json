@@ -1,0 +1,13 @@
+[
+  {
+    "slug": "2026-04-27-tex-islands-poc",
+    "title": "TeX islands in HTML and Real Time writing system — proof of concept",
+    "date": "2026-04-28",
+    "summary": "First post in the new pipeline. Prose flows in HTML; equations and TikZ figures render as TeX-quality SVG islands.",
+    "tags": [
+      "meta",
+      "infrastructure"
+    ],
+    "source": "posts/2026-04-27-tex-islands-poc/post.md"
+  }
+]

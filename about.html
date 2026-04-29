@@ -9,6 +9,32 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/tufte.css">
+
+  <style>
+    .author-photo {
+      float: right;
+      width: 200px;
+      height: auto;
+      margin: 0 0 1rem 1.5rem;
+      border-radius: 0.25rem;
+      shape-outside: margin-box;
+    }
+    @media (max-width: 700px) {
+      .author-photo {
+        float: none;
+        display: block;
+        width: 100%;
+        max-width: 240px;
+        margin: 0 auto 1.2rem;
+      }
+    }
+    article h1 { margin-bottom: 0.2rem; }
+    article h1 + p { color: #6b6757; font-family: "Noto Sans", system-ui, sans-serif; font-size: 0.92rem; margin-top: 0; }
+    article h2 { margin-top: 2rem; font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.06em; color: #4a4839; border-bottom: 1px solid #d6d2c2; padding-bottom: 0.25rem; }
+    article h3 { margin-top: 1.4rem; font-size: 1rem; }
+    article ul { padding-left: 1.2em; }
+    article li { margin-bottom: 0.3em; }
+  </style>
 </head>
 <body>
   <div class="site">
@@ -26,36 +52,47 @@
 
     <main class="page">
       <article>
-        <h1>About</h1>
+        <img src="/assets/img/photo.jpg" alt="Ankhlan Erdenebat" class="author-photo">
+<h1>Ankhlan Erdenebat</h1>
+<p>Ulaanbaatar, Mongolia · +976-9910-3094 · <a href="mailto:ankhlan@gmail.com">ankhlan@gmail.com</a> · <a href="/resume.pdf">CV (PDF)</a></p>
+<h2>Professional summary</h2>
+<p>Central bank treasury professional with 8 years of experience managing a USD 7 billion reserves portfolio across fixed-income, FX, and structured transactions. Brings buy-side insight into sovereign and supranational debt markets — having allocated to and built relationships with the same issuer and dealer community that ADB's funding operations serve. Track record in structured financing, liability hedging, team leadership, and governance reporting.</p>
+<h2>Professional experience</h2>
+<h3>Bank of Mongolia · Ulaanbaatar, Mongolia</h3>
+<p><strong>Senior Investment Officer</strong> · 2025–present</p>
+<ul>
+<li>Lead the Reserve Management desk (USD 7 billion AUM), supervising 4 dealers across multi-currency fixed-income, FX, and derivatives portfolios.</li>
+<li>Advise the government on structuring and managing the newly established Future Heritage Fund, including investment policy design and counterparty selection.</li>
+<li>Develop and present quarterly and annual portfolio strategies to the Investment Committee, covering allocation, instruments, and counterparty limits.</li>
+<li>Manage relationships with 15+ counterparties incl. BIS, Banque de France, Bank of England, JP Morgan, HSBC, Deutsche Bank, Standard Chartered, MUFG.</li>
+<li>Prepare monthly performance and market-condition reports for senior management.</li>
+</ul>
+<p><strong>Investment Officer / Treasury Dealer</strong> · 2018–2023</p>
+<ul>
+<li>Managed the gold monetization program — purchasing domestic doré, coordinating LBMA-certified refining, and converting into monetary gold within the reserves framework.</li>
+<li>Negotiated and executed structured gold-financing transactions bilaterally with international banks.</li>
+<li>Managed sovereign, supranational, and agency bond portfolios (USD 350M+) across USD, JPY, and CNY; executed USD 5–50M transactions in primary and secondary markets.</li>
+<li>Executed FX spot, forward, swap, repo, and derivative transactions for liquidity management and hedging.</li>
+</ul>
+<p><strong>Risk Officer / Economist</strong> · 2014–2016</p>
+<ul>
+<li>Built market, credit, and liquidity risk models; drafted policy notes on reserves performance and risk limits; supported implementation of reserves management systems.</li>
+</ul>
+<h2>Education &amp; training</h2>
+<ul>
+<li><strong>International University of Japan (IUJ)</strong> — M.A. Economics (JDS Scholarship), 2023–2025.</li>
+<li><strong>San Francisco State University</strong> — B.A. Economics, 2014.</li>
+<li><strong>World Bank RAMP &amp; IMF Treasury</strong> — reserves management, treasury operations, fixed-income trading.</li>
+</ul>
+<h2>Selected research</h2>
+<p><em>Effect of Central Bank Domestic Gold Monetization on Interest Rate and Exchange Rate Volatility</em> (Master's thesis, with distinction, 2025) — BEKK-GARCH analysis showing that gold purchases significantly predict exchange-rate and interest-rate volatility.</p>
+<h2>Additional</h2>
+<ul>
+<li><strong>Tools:</strong> Bloomberg, Reuters/Eikon, Excel, R, Intellect Treasury TMS.</li>
+<li><strong>Languages:</strong> Mongolian (native), English (professional).</li>
+<li><strong>Citizenship:</strong> Mongolia.</li>
+</ul>
 
-        <h2>The author</h2>
-        <p>Ankhlan Erdenebileg is a monetary economist working at a central
-        bank. His writing covers reserves, gold, yield curves, FX flows, and
-        the plumbing of the international monetary system. He prefers
-        first-principles arguments, primary sources, and small charts that
-        say one thing well.</p>
-
-        <h2>The site</h2>
-        <p>This site is a working notebook. It is also a proof of concept
-        for a writing system that combines TeX-quality typography for
-        mathematics and figures with HTML-native prose. The architecture
-        is documented in the inaugural post and may evolve in public.</p>
-
-        <p>Each post is one markdown file. Inside that file, fenced blocks
-        marked <code>tex-island</code> carry self-contained TeX documents
-        that are compiled to SVG at build time and embedded inline. Simple
-        inline mathematics is rendered in the browser by KaTeX. Display
-        math and TikZ figures use real TeX. The seam between the two
-        layout engines is an <code>&lt;object&gt;</code> tag.</p>
-
-        <p>The site is static HTML served by GitHub Pages. The build is a
-        small Python program. There is no tracking, no analytics, no
-        comment system, and no AI byline — the tool helps shape the words;
-        the words and the responsibility for them are the author's.</p>
-
-        <h2>Contact</h2>
-        <p>Mail: <a href="mailto:ankhlan.e@mongolbank.mn">ankhlan.e@mongolbank.mn</a></p>
-        <p>CV: <a href="/resume.pdf">resume.pdf</a></p>
       </article>
     </main>
 

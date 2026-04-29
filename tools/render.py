@@ -38,7 +38,7 @@ REPO = Path(__file__).resolve().parent.parent
 TEMPLATES = REPO / "templates"
 SITE_CONFIG = REPO / "site.yaml"
 
-FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*\n", re.DOTALL)
+FRONTMATTER_RE = re.compile(r"\A\s*---\s*\n(.*?)\n---\s*\n", re.DOTALL)
 ISLAND_FENCE_RE = re.compile(
     r"^```tex-island(?P<attrs>[^\n]*)\n(?P<body>.*?)^```[ \t]*$",
     re.MULTILINE | re.DOTALL,
@@ -171,8 +171,23 @@ def render_index(posts: list[Post], repo_root: Path = REPO) -> Path:
 
 
 def render_about(repo_root: Path = REPO) -> Path:
+    """Render the About page from pages/about.md if present, else empty body."""
+    about_md = repo_root / "pages" / "about.md"
+    title = "About"
+    body_html = ""
+    if about_md.exists():
+        text = about_md.read_text(encoding="utf-8")
+        fm: dict = {}
+        body_md = text
+        m = FRONTMATTER_RE.match(text)
+        if m:
+            fm = yaml.safe_load(m.group(1)) or {}
+            body_md = text[m.end():]
+        title = fm.get("title", "About")
+        body_html = render_markdown(body_md)
+
     template = jinja_env().get_template("about.html.j2")
-    rendered = template.render(**site_config())
+    rendered = template.render(title=title, body=body_html, **site_config())
     out = repo_root / "about.html"
     out.write_text(rendered, encoding="utf-8")
     return out

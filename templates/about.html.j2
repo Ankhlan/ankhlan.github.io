@@ -3,12 +3,38 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>About · {{ site_title }}</title>
+  <title>{{ title | default('About') }} · {{ site_title }}</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,600;1,400&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/tufte.css">
+
+  <style>
+    .author-photo {
+      float: right;
+      width: 200px;
+      height: auto;
+      margin: 0 0 1rem 1.5rem;
+      border-radius: 0.25rem;
+      shape-outside: margin-box;
+    }
+    @media (max-width: 700px) {
+      .author-photo {
+        float: none;
+        display: block;
+        width: 100%;
+        max-width: 240px;
+        margin: 0 auto 1.2rem;
+      }
+    }
+    article h1 { margin-bottom: 0.2rem; }
+    article h1 + p { color: #6b6757; font-family: "Noto Sans", system-ui, sans-serif; font-size: 0.92rem; margin-top: 0; }
+    article h2 { margin-top: 2rem; font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.06em; color: #4a4839; border-bottom: 1px solid #d6d2c2; padding-bottom: 0.25rem; }
+    article h3 { margin-top: 1.4rem; font-size: 1rem; }
+    article ul { padding-left: 1.2em; }
+    article li { margin-bottom: 0.3em; }
+  </style>
 </head>
 <body>
   <div class="site">
@@ -26,36 +52,7 @@
 
     <main class="page">
       <article>
-        <h1>About</h1>
-
-        <h2>The author</h2>
-        <p>Ankhlan Erdenebileg is a monetary economist working at a central
-        bank. His writing covers reserves, gold, yield curves, FX flows, and
-        the plumbing of the international monetary system. He prefers
-        first-principles arguments, primary sources, and small charts that
-        say one thing well.</p>
-
-        <h2>The site</h2>
-        <p>This site is a working notebook. It is also a proof of concept
-        for a writing system that combines TeX-quality typography for
-        mathematics and figures with HTML-native prose. The architecture
-        is documented in the inaugural post and may evolve in public.</p>
-
-        <p>Each post is one markdown file. Inside that file, fenced blocks
-        marked <code>tex-island</code> carry self-contained TeX documents
-        that are compiled to SVG at build time and embedded inline. Simple
-        inline mathematics is rendered in the browser by KaTeX. Display
-        math and TikZ figures use real TeX. The seam between the two
-        layout engines is an <code>&lt;object&gt;</code> tag.</p>
-
-        <p>The site is static HTML served by GitHub Pages. The build is a
-        small Python program. There is no tracking, no analytics, no
-        comment system, and no AI byline — the tool helps shape the words;
-        the words and the responsibility for them are the author's.</p>
-
-        <h2>Contact</h2>
-        <p>Mail: <a href="mailto:ankhlan.e@mongolbank.mn">ankhlan.e@mongolbank.mn</a></p>
-        <p>CV: <a href="/resume.pdf">resume.pdf</a></p>
+        {{ body | safe }}
       </article>
     </main>
 

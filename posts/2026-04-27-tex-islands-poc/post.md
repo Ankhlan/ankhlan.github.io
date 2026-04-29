@@ -1,4 +1,4 @@
- ---
+---
 title: "TeX islands in HTML and Real Time writing system — proof of concept"
 date: 2026-04-28
 tags: [meta, infrastructure]
