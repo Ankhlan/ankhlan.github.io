@@ -1,5 +1,13 @@
 [
   {
+    "slug": "2026-04-29-sefsdf",
+    "title": "Sefsdf",
+    "date": "2026-04-29",
+    "summary": "",
+    "tags": [],
+    "source": "posts/2026-04-29-sefsdf/post.md"
+  },
+  {
     "slug": "2026-04-27-tex-islands-poc",
     "title": "TeX islands in HTML and Real Time writing system — proof of concept",
     "date": "2026-04-28",
