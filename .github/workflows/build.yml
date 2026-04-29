@@ -1,13 +1,11 @@
 name: Build site
 
-# Triggers on push of any source content (markdown, templates, tools, assets,
-# config). The build runs python tools/build.py with TeX Live + Python deps,
-# regenerates HTML/SVG outputs, commits them back with [skip ci], and lets
-# Pages deploy from main as it does today.
+# Runs on every push to main that touches sources. Uses the pre-built
+# builder image (ghcr.io/<owner>/<repo>-builder:latest) so TeX Live and
+# Python deps are already installed — no apt-get on every publish.
 #
-# This enables "save from any browser via GitHub API" — once the source is
-# committed (by a local push or by the desk editor's Save), the Action runs
-# the same build pipeline and the published site updates.
+# The image itself is built by .github/workflows/build-image.yml whenever
+# .github/Dockerfile or requirements.txt changes.
 
 on:
   push:
@@ -19,12 +17,12 @@ on:
       - 'tools/**'
       - 'assets/**'
       - 'site.yaml'
-      - 'requirements.txt'
       - '.github/workflows/build.yml'
   workflow_dispatch:
 
 permissions:
   contents: write
+  packages: read
 
 concurrency:
   group: site-build
@@ -33,6 +31,12 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/ankhlan/ankhlan.github.io-builder:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,38 +44,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 1
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-
-      - name: Install Python deps
-        run: pip install -r requirements.txt
-
-      - name: Cache TeX Live apt packages
-        id: tex-cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            /var/cache/apt/archives/*.deb
-          key: tex-apt-${{ runner.os }}-v1
-
-      - name: Install TeX Live + dvisvgm
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y --no-install-recommends \
-            texlive-latex-base \
-            texlive-latex-recommended \
-            texlive-latex-extra \
-            texlive-pictures \
-            texlive-fonts-recommended \
-            dvisvgm
-          which latex && latex --version | head -1
-          which dvisvgm && dvisvgm --version | head -1
+      - name: Mark workspace safe for git
+        # actions/checkout sets directory ownership to the runner user, but
+        # the container runs as root. Tell git the directory is fine.
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Build site
-        run: python tools/build.py
+        run: python3 tools/build.py
 
       - name: Commit generated HTML/SVG
         run: |
