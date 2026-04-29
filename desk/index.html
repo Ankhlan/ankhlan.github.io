@@ -270,7 +270,24 @@
   <button id="btn-open" class="ghost" title="Open a local .md file (writable)">Open .md</button>
   <button id="btn-save" hidden>Save</button>
   <button id="btn-download" class="ghost" hidden>Download</button>
+  <button id="btn-publish" hidden title="Build, commit, and push to GitHub Pages">Publish</button>
 </header>
+
+<dialog id="publish-dialog">
+  <div class="dialog-body">
+    <h2>Publish</h2>
+    <p class="hint">Runs <code>python tools/publish.py</code> in the repo: builds, commits, pushes to <code>origin/main</code>. GitHub Pages deploys in ~30–90 s.</p>
+    <label class="dialog-field">
+      <span>Commit message (optional)</span>
+      <input id="publish-message" type="text" placeholder="Publish 2026-04-29 14:30">
+    </label>
+    <div class="dialog-output" id="publish-output" hidden></div>
+    <div class="dialog-actions">
+      <button class="ghost" id="publish-cancel">Cancel</button>
+      <button id="publish-go">Publish</button>
+    </div>
+  </div>
+</dialog>
 
 <div id="banner"></div>
 
@@ -313,8 +330,14 @@
   const btnOpen = document.getElementById('btn-open');
   const btnNew = document.getElementById('btn-new-post');
   const btnOpenHome = document.getElementById('btn-open-home');
+  const btnPublish = document.getElementById('btn-publish');
   const postList = document.getElementById('post-list');
   const viewEditor = document.getElementById('view-editor');
+  const dlgPublish = document.getElementById('publish-dialog');
+  const inpPublishMsg = document.getElementById('publish-message');
+  const outPublish = document.getElementById('publish-output');
+  const btnPublishGo = document.getElementById('publish-go');
+  const btnPublishCancel = document.getElementById('publish-cancel');
 
   const md = window.markdownit ? window.markdownit({ html: true, linkify: true, typographer: true }) : null;
 
@@ -359,6 +382,7 @@
     btnSave.hidden = true;
     btnDownload.hidden = true;
     btnOpen.hidden = false;
+    btnPublish.hidden = false;
     hideBanner();
     try {
       const res = await fetch('/posts.json', { cache: 'no-cache' });
@@ -403,6 +427,7 @@
     btnSave.hidden = !supportsFs;
     btnDownload.hidden = supportsFs;
     btnOpen.hidden = false;
+    btnPublish.hidden = false;
     currentPath = path;
     currentHandle = null;
     hideBanner();
@@ -545,6 +570,88 @@
   btnOpenHome.onclick = openLocal;
   btnSave.onclick = saveToHandle;
   btnDownload.onclick = downloadFile;
+
+  // ---- publish ---------------------------------------------------------
+  // Posts to the local watcher's API. URL inferred from the page's host:
+  // if served at <host>:<port>, the API is at <host>:<port + 1>.
+  function apiBaseUrl() {
+    // Allow override via localStorage for unusual setups.
+    const override = localStorage.getItem('desk:apiBase');
+    if (override) return override.replace(/\/+$/, '');
+    if (location.protocol.startsWith('http')) {
+      const port = parseInt(location.port || (location.protocol === 'https:' ? '443' : '80'), 10);
+      const apiPort = isNaN(port) ? '4322' : String(port + 1);
+      return `${location.protocol}//${location.hostname}:${apiPort}`;
+    }
+    // file:// — assume the watcher is local on default ports
+    return 'http://127.0.0.1:4322';
+  }
+
+  btnPublish.onclick = () => {
+    inpPublishMsg.value = '';
+    outPublish.hidden = true;
+    outPublish.textContent = '';
+    outPublish.className = 'dialog-output';
+    btnPublishGo.disabled = false;
+    btnPublishCancel.disabled = false;
+    btnPublishGo.textContent = 'Publish';
+    if (typeof dlgPublish.showModal === 'function') {
+      dlgPublish.showModal();
+    } else {
+      dlgPublish.setAttribute('open', '');
+    }
+    setTimeout(() => inpPublishMsg.focus(), 50);
+  };
+
+  btnPublishCancel.onclick = () => dlgPublish.close();
+
+  async function doPublish() {
+    // Save first if a handle is set so we don't push a stale draft.
+    if (currentHandle && (editor.value !== lastSavedText)) {
+      await saveToHandle();
+    }
+    btnPublishGo.disabled = true;
+    btnPublishCancel.disabled = true;
+    btnPublishGo.textContent = 'publishing…';
+    outPublish.hidden = false;
+    outPublish.className = 'dialog-output';
+    outPublish.textContent = 'connecting to watcher api at ' + apiBaseUrl() + '…';
+    try {
+      const res = await fetch(apiBaseUrl() + '/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: inpPublishMsg.value || '' }),
+      });
+      const body = await res.json();
+      const text = (body.stdout || '') + (body.stderr ? '\n' + body.stderr : '');
+      outPublish.textContent = text || (body.ok ? 'ok' : 'error');
+      outPublish.className = 'dialog-output ' + (body.ok ? 'ok' : 'err');
+      btnPublishGo.textContent = body.ok ? 'Done' : 'Failed';
+      btnPublishCancel.disabled = false;
+      if (body.ok) {
+        setStatus('✓ pushed · live in 30–90s');
+      } else {
+        setStatus('publish failed', 'warn');
+      }
+    } catch (e) {
+      outPublish.textContent = 'could not reach watcher api at ' + apiBaseUrl() + '\n\n'
+        + e.message + '\n\n'
+        + 'is the watcher running? `python tools/watch.py` from the repo.';
+      outPublish.className = 'dialog-output err';
+      btnPublishGo.textContent = 'Failed';
+      btnPublishCancel.disabled = false;
+      setStatus('watcher api unreachable', 'warn');
+    }
+  }
+
+  btnPublishGo.onclick = () => {
+    if (btnPublishGo.textContent === 'Done' || btnPublishGo.textContent === 'Failed') {
+      dlgPublish.close();
+      return;
+    }
+    doPublish();
+  };
+
   btnNew.onclick = () => {
     const slug = prompt('Slug for the new post (e.g., yields-curve):');
     if (!slug) return;
