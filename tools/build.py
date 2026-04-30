@@ -16,11 +16,13 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from render import render_all, render_index, render_about  # noqa: E402
+from render import render_all, render_index, render_about, list_all_posts  # noqa: E402
 
 
 def write_posts_manifest(posts, out: Path) -> None:
-    """Emit posts.json — used by the desk editor's home view."""
+    """Emit posts.json — used by the desk editor's home view. Includes drafts
+    (with a `draft: true` flag) so the editor can list them; the public index
+    page filters drafts out independently."""
     manifest = sorted(
         [
             {
@@ -29,6 +31,7 @@ def write_posts_manifest(posts, out: Path) -> None:
                 "date": p.date,
                 "summary": p.summary,
                 "tags": p.tags,
+                "draft": bool(p.frontmatter.get("draft")),
                 "source": f"posts/{p.slug}/post.md",
             }
             for p in posts
@@ -46,19 +49,23 @@ def main(argv: list[str]) -> int:
         return 1
 
     start = time.perf_counter()
-    posts = list(render_all(posts_dir))
-    index_path = render_index(posts)
+    posts = list(render_all(posts_dir))            # only published posts get rendered
+    all_posts = list(list_all_posts(posts_dir))    # incl. drafts, for the manifest
+    index_path = render_index(posts)               # public listing — drafts excluded
     about_path = render_about()
     manifest_path = REPO / "posts.json"
-    write_posts_manifest(posts, manifest_path)
+    write_posts_manifest(all_posts, manifest_path)
     elapsed = time.perf_counter() - start
 
+    drafts = [p for p in all_posts if p.frontmatter.get("draft")]
     for post in posts:
-        print(f"  post   {post.slug:<40} {post.out_path.relative_to(REPO)}")
-    print(f"  index                                            {index_path.relative_to(REPO)}")
-    print(f"  about                                            {about_path.relative_to(REPO)}")
-    print(f"  manifest                                         {manifest_path.relative_to(REPO)}")
-    print(f"\nbuilt {len(posts)} post(s) + 2 page(s) + manifest in {elapsed:.2f}s")
+        print(f"  post     {post.slug:<40} {post.out_path.relative_to(REPO)}")
+    for d in drafts:
+        print(f"  draft    {d.slug:<40} (excluded from public index)")
+    print(f"  index                                              {index_path.relative_to(REPO)}")
+    print(f"  about                                              {about_path.relative_to(REPO)}")
+    print(f"  manifest                                           {manifest_path.relative_to(REPO)}")
+    print(f"\nbuilt {len(posts)} post(s), {len(drafts)} draft(s), 2 page(s) + manifest in {elapsed:.2f}s")
     return 0
 
 

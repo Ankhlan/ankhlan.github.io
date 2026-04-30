@@ -193,13 +193,23 @@ def render_about(repo_root: Path = REPO) -> Path:
     return out
 
 
-def render_all(posts_dir: Path) -> Iterable[Post]:
+def list_all_posts(posts_dir: Path) -> Iterable[Post]:
+    """Every post.md in posts/ — drafts included. For the desk's manifest."""
     for folder in sorted(posts_dir.iterdir()):
         if not folder.is_dir():
             continue
         post_md = folder / "post.md"
         if post_md.exists():
-            yield render_post(post_md)
+            yield parse_post(post_md)
+
+
+def render_all(posts_dir: Path) -> Iterable[Post]:
+    """Render every non-draft post to its index.html. Drafts are skipped
+    entirely — no HTML on disk, never listed publicly."""
+    for post in list_all_posts(posts_dir):
+        if post.frontmatter.get("draft"):
+            continue
+        yield render_post(post.src_path)
 
 
 if __name__ == "__main__":

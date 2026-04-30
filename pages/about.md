@@ -6,47 +6,28 @@ title: About
 
 # Ankhlan Erdenebat
 
-Ulaanbaatar, Mongolia · +976-9910-3094 · [ankhlan@gmail.com](mailto:ankhlan@gmail.com) ·
+Ulaanbaatar, Mongolia · [ankhlan@gmail.com](mailto:ankhlan@gmail.com)
 
-## Professional summary
+## What I do
 
-Central bank treasury professional with 8 years of experience managing a FX reserves portfolio across fixed-income, FX, and structured transactions. Brings buy-side insight into sovereign and supranational debt markets. Track record in structured financing, liability hedging, team leadership, and governance reporting.
+Senior Investment Officer at the Bank of Mongolia, leading the Reserve Management desk. My day-to-day is sovereign and supranational fixed income, FX, gold, and the operational plumbing that connects a small central bank to the international monetary system.
 
-## Professional experience
+## What I write about
 
-### Bank of Mongolia · Ulaanbaatar, Mongolia
+- **Reserves and gold** — composition, custody, monetization, how a buy-side actually allocates.
+- **Yield curves and rates** — term structure, duration risk, the carry trade as seen from a small open economy.
+- **FX and flows** — Mongolia's currency, the basis, intervention, dollar liquidity.
+- **Central-bank operations** — what really happens at a reserves desk; counterparty risk; settlement.
+- **Monetary plumbing** — correspondent banking, BIS, repo, the Eurodollar system from outside the core.
+- **Reading notes** — short reactions to papers, central-bank decisions, market events.
 
-**Senior Investment Officer** · 2025–present
+## Background
 
-- Lead the Reserve Management desk, supervising dealing across multi-currency fixed-income, FX, and derivatives portfolios.
-- Advise the government on structuring and managing the newly established Future Heritage Fund, including investment policy design and counterparty selection.
-- Develop and present quarterly and annual portfolio strategies to the Investment Committee, covering allocation, instruments, and counterparty limits.
-- Manage relationships with 15+ counterparties incl. BIS, Banque de France, Bank of England, JP Morgan, HSBC, Deutsche Bank, Standard Chartered, MUFG.
-- Prepare monthly performance and market-condition reports for senior management.
+- **Bank of Mongolia** — Senior Investment Officer (2025–present); previously Investment Officer / Treasury Dealer (2018–2023) and Risk Officer / Economist (2014–2016).
+- **International University of Japan (IUJ)** — M.A. Economics (JDS Scholarship, 2023–2025). Master's thesis on central-bank gold monetization and its effect on rate and FX volatility, with distinction.
+- **San Francisco State University** — B.A. Economics (2014).
+- **World Bank RAMP** and **IMF Treasury** training in reserves management and treasury operations.
 
-**Investment Officer / Treasury Dealer** · 2018–2023
+## Disclaimer
 
-- Managed the gold monetization program — purchasing domestic doré, coordinating LBMA-certified refining, and converting into monetary gold within the reserves framework.
-- Negotiated and executed structured gold-financing transactions bilaterally with international banks.
-- Managed sovereign, supranational, and agency bond portfolios across USD, JPY, and CNY; executed transactions in primary and secondary markets.
-- Executed FX spot, forward, swap, repo, and derivative transactions for liquidity management and hedging.
-
-**Risk Officer / Economist** · 2014–2016
-
-- Built market, credit, and liquidity risk models; drafted policy notes on reserves performance and risk limits; supported implementation of reserves management systems.
-
-## Education & training
-
-- **International University of Japan (IUJ)** — M.A. Economics (JDS Scholarship), 2023–2025.
-- **San Francisco State University** — B.A. Economics, 2014.
-- **World Bank RAMP & IMF Treasury** — reserves management, treasury operations, fixed-income trading.
-
-## Selected research
-
-*Effect of Central Bank Domestic Gold Monetization on Interest Rate and Exchange Rate Volatility* (Master's thesis, with distinction, 2025) — BEKK-GARCH analysis showing that gold purchases significantly predict exchange-rate and interest-rate volatility.
-
-## Additional
-
-- **Tools:** Bloomberg, Reuters/Eikon, Excel, R, Intellect Treasury TMS.
-- **Languages:** Mongolian (native), English (professional).
-- **Citizenship:** Mongolia.
+This site is a personal notebook. Nothing here represents the views of the Bank of Mongolia or any other institution. Posts are my own analysis, not investment advice.

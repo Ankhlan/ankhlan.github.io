@@ -919,17 +919,60 @@
     if (!slug) return;
     const today = new Date().toISOString().slice(0, 10);
     const path = `posts/${today}-${slug}/post.md`;
-    const stub = `---\ntitle: "${slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}"\ndate: ${today}\ntags: []\nsummary: ""\ndraft: true\n---\n\n`;
+    const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const stub = `---
+title: "${title}"
+date: ${today}
+tags: []
+summary: ""
+draft: true
+---
+
+## What this is
+
+One paragraph: the question you're answering, why it matters, who it's for.
+
+## Argument
+
+The body of the post. Use prose; let the structure emerge.
+
+For inline math: $C_t / (1+y)^t$. For display math:
+
+$$
+P = \\sum_{t=1}^{T} \\frac{C_t}{(1+y)^t}
+$$
+
+For TikZ figures, use a tex-island fence:
+
+\`\`\`tex-island name=fig-yield
+\\begin{tikzpicture}
+  % your TikZ here
+\\end{tikzpicture}
+\`\`\`
+
+## Sources
+
+- (citation)
+- (citation)
+
+---
+
+*Drafted ${today}. Set \`draft: false\` in the frontmatter when ready to publish.*
+`;
     editor.value = stub;
     lastSavedText = '';
     dirty = true;
     currentPath = path;
     currentHandle = null;
     setView('editor');
-    crumb.innerHTML = '<a href="?" data-link>posts</a> ▸ <span style="color:var(--ink)">' + escapeHtml(path) + '</span> (new — unsaved)';
+    crumb.innerHTML = '<a href="?" data-link>posts</a> ▸ <span style="color:var(--ink)">' + escapeHtml(path) + '</span> (new draft)';
     render();
-    setStatus('● new');
-    showBanner('New post is unsaved. Click <strong>Open .md</strong> after creating <code>' + escapeHtml(path) + '</code> in the repo, or <strong>Download</strong> the file.');
+    setStatus('● new draft');
+    if (getToken()) {
+      showBanner('New draft. Click <strong>Save</strong> to commit it via the GitHub API. It stays a draft (won\'t appear publicly) until you set <code>draft: false</code> in the frontmatter.');
+    } else {
+      showBanner('New draft. <strong>Sign in</strong> to commit it via GitHub, or <strong>Download</strong> and place at <code>' + escapeHtml(path) + '</code> in the repo.');
+    }
   };
 
   document.addEventListener('click', (ev) => {
